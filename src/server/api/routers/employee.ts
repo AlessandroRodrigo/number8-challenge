@@ -38,7 +38,7 @@ export const employeeRouter = createTRPCRouter({
 
       return {
         ...result[0]?.employee,
-        department: result[0]?.department.name,
+        department: result[0]?.department,
       };
     }),
   create: publicProcedure

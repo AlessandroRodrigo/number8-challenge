@@ -1,15 +1,30 @@
+import { Button } from "@mantine/core";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { EmployeeCardUtils } from "~/components/employee-card/employee-card.utils";
 import { api } from "~/utils/api";
 
 export default function EmployeeDetails() {
+  const [currentDepartment, setCurrentDepartment] = useState("");
   const { query } = useRouter();
 
-  const { isLoading, data } = api.employees.getById.useQuery({
-    id: Number(query.id),
-  });
+  const { isLoading, data } = api.employees.getById.useQuery(
+    {
+      id: Number(query.id),
+    },
+    {
+      enabled: !!query.id,
+      onSuccess: (data) => {
+        if (!data.department) return;
+        setCurrentDepartment(data.department.id.toString());
+      },
+    },
+  );
+
+  const { isLoading: isUpdating, mutateAsync: updateDepartment } =
+    api.employees.updateDepartment.useMutation();
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -33,24 +48,34 @@ export default function EmployeeDetails() {
             />
           </div>
 
-          <div>
+          <div className="flex flex-col gap-6">
             <h2 className="text-lg font-semibold">
               {data?.firstName} {data?.lastName}
             </h2>
 
             <div className="flex flex-col text-sm text-gray-700">
               <span>Employee ID: {data?.id}</span>
-              <span>Department: {data?.department}</span>
+              <span>Department: {data?.department?.name}</span>
               <span>Telephone: {data?.phone}</span>
               <span>Address: {data?.address}</span>
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2">
               <span>Update department</span>
-              <DepartmentSelect />
-              <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-                Update
-              </button>
+              <DepartmentSelect
+                value={currentDepartment}
+                onChange={(value) => setCurrentDepartment(value)}
+              />
+              <Button
+                onClick={() =>
+                  updateDepartment({
+                    id: Number(query.id),
+                    departmentId: Number(currentDepartment),
+                  })
+                }
+              >
+                {isUpdating ? "Updating..." : "Update"}
+              </Button>
             </div>
           </div>
 
@@ -74,13 +99,22 @@ export default function EmployeeDetails() {
   );
 }
 
-function DepartmentSelect() {
+type DepartmentSelectProps = {
+  value?: string;
+  onChange?: (value: string) => void;
+};
+
+function DepartmentSelect({ value, onChange }: DepartmentSelectProps) {
   const { isLoading, data } = api.departments.getAll.useQuery();
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <select>
+    <select
+      className="rounded border border-gray-200 px-2 py-1"
+      value={value}
+      onChange={(e) => onChange?.(e.target.value)}
+    >
       {data?.map((department) => (
         <option key={department.id} value={department.id}>
           {department.name}
