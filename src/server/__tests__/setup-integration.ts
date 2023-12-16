@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
 import { db } from "~/server/db";
-import { department, employees } from "~/server/db/schema";
+import { department, departmentEmployee, employees } from "~/server/db/schema";
 
 async function createMockedDepartment() {
   const queryExecuted = await db
@@ -17,6 +17,19 @@ async function createMockedDepartment() {
       return operators.eq(fields.id, queryExecuted[0].insertId);
     },
   });
+}
+
+async function createMockedDepartmentEmployeeRelation(
+  departmentId: number,
+  employeeId: number,
+) {
+  await db
+    .insert(departmentEmployee)
+    .values({
+      departmentId,
+      employeeId,
+    })
+    .execute();
 }
 
 async function createMockedEmployee() {
@@ -51,6 +64,7 @@ export function setup() {
     ctx,
     createMockedEmployee,
     createMockedDepartment,
+    createMockedDepartmentEmployeeRelation,
     cleanDatabase,
   };
 }
