@@ -1,8 +1,13 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { DepartmentRepository } from "~/server/repositories/drizzle/department.repository";
+import { EmployeeRepository } from "~/server/repositories/drizzle/employee.repository";
 import { EmployeeService } from "~/server/services/employee.service";
 
-const service = new EmployeeService();
+const employeeRepository = new EmployeeRepository();
+const departmentRepository = new DepartmentRepository();
+
+const service = new EmployeeService(employeeRepository, departmentRepository);
 
 export const employeeRouter = createTRPCRouter({
   getAll: publicProcedure.query(() => {
@@ -55,15 +60,5 @@ export const employeeRouter = createTRPCRouter({
     )
     .mutation(({ input }) => {
       return service.update(input);
-    }),
-  updateDepartment: publicProcedure
-    .input(
-      z.object({
-        id: z.number(),
-        departmentId: z.number(),
-      }),
-    )
-    .mutation(({ input }) => {
-      return service.updateDepartment(input);
     }),
 });
