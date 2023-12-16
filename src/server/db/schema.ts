@@ -1,7 +1,6 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
 import {
   bigint,
   index,
@@ -16,21 +15,40 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const mysqlTable = mysqlTableCreator(
-  (name) => `number8-challenge_${name}`,
+export const mysqlTable = mysqlTableCreator((name) => name);
+
+export const employees = mysqlTable(
+  "employee",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    firstName: varchar("first_name", { length: 256 }),
+    lastName: varchar("last_name", { length: 256 }),
+    hireDate: timestamp("hire_date"),
+    phone: varchar("phone", { length: 256 }),
+    address: varchar("address", { length: 256 }),
+  },
+  (example) => ({
+    nameIndex: index("name_idx").on(example.firstName, example.lastName),
+  }),
 );
 
-export const posts = mysqlTable(
-  "post",
+export const department = mysqlTable(
+  "department",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
   }),
 );
+
+export const departmentEmployee = mysqlTable("department_employee", {
+  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+  departmentId: bigint("department_id", { mode: "number" }).references(
+    () => department.id,
+  ),
+  employeeId: bigint("employee_id", { mode: "number" }).references(
+    () => employees.id,
+  ),
+});
