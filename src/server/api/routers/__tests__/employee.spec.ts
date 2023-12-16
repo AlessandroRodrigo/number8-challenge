@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
-import { inferProcedureInput } from "@trpc/server";
+import { type inferProcedureInput } from "@trpc/server";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { setup } from "~/server/__tests__/setup-integration";
-import { AppRouter } from "~/server/api/root";
+import { type AppRouter } from "~/server/api/root";
 
 describe("Employee router", () => {
   beforeEach(async () => {
