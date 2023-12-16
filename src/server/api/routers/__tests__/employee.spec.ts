@@ -127,4 +127,35 @@ describe("Employee router", () => {
 
     expect(output).toEqual(input);
   });
+
+  it("should update department of employee", async () => {
+    const { caller, prepareEmployeeWithDepartment, createDepartment } = setup();
+
+    const { employeeCreated, departmentCreated } =
+      await prepareEmployeeWithDepartment();
+
+    type Input = inferProcedureInput<
+      AppRouter["employees"]["updateDepartment"]
+    >;
+
+    const newDepartmentCreated = await createDepartment();
+
+    if (!newDepartmentCreated) {
+      throw new Error("Department not created");
+    }
+
+    const input: Input = {
+      id: employeeCreated.id,
+      departmentId: newDepartmentCreated.id,
+    };
+
+    const beforeUser = await caller.employees.getById({ id: input.id });
+
+    await caller.employees.updateDepartment(input);
+
+    const afterUser = await caller.employees.getById({ id: input.id });
+
+    expect(beforeUser).toHaveProperty("department", departmentCreated.name);
+    expect(afterUser).toHaveProperty("department", newDepartmentCreated.name);
+  });
 });

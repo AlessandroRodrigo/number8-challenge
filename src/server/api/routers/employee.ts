@@ -126,4 +126,26 @@ export const employeeRouter = createTRPCRouter({
         },
       });
     }),
+  updateDepartment: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        departmentId: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .update(departmentEmployee)
+        .set({
+          departmentId: input.departmentId,
+        })
+        .where(eq(departmentEmployee.employeeId, input.id))
+        .execute();
+
+      return await ctx.db.query.employees.findFirst({
+        where(fields, operators) {
+          return operators.eq(fields.id, input.id);
+        },
+      });
+    }),
 });
