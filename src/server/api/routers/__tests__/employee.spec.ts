@@ -1,8 +1,17 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { faker } from "@faker-js/faker";
+import { inferProcedureInput } from "@trpc/server";
+import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { setup } from "~/server/__tests__/setup-integration";
+import { AppRouter } from "~/server/api/root";
 
 describe("Employee router", () => {
   beforeEach(async () => {
+    const { cleanDatabase } = setup();
+
+    await cleanDatabase();
+  });
+
+  afterAll(async () => {
     const { cleanDatabase } = setup();
 
     await cleanDatabase();
@@ -45,21 +54,24 @@ describe("Employee router", () => {
       throw new Error("Department not created");
     }
 
-    const output = await caller.employees.create({
-      firstName: "John",
-      lastName: "Doe",
-      hireDate: new Date(),
-      phone: "123456789",
-      address: "123 Main St",
-      departmentId: departmentCreated.id,
-    });
+    type Input = inferProcedureInput<AppRouter["employees"]["create"]>;
 
-    expect(output).toMatchObject({
-      firstName: "John",
-      lastName: "Doe",
-      phone: "123456789",
-      address: "123 Main St",
-    });
+    const input: Input = {
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      hireDate: faker.date.past(),
+      phone: faker.phone.number(),
+      address: faker.location.streetAddress(),
+      departmentId: departmentCreated.id,
+    };
+
+    const output = await caller.employees.create(input);
+
+    expect(output).toHaveProperty("firstName", input.firstName);
+    expect(output).toHaveProperty("lastName", input.lastName);
+    expect(output).toHaveProperty("hireDate", input.hireDate);
+    expect(output).toHaveProperty("phone", input.phone);
+    expect(output).toHaveProperty("address", input.address);
   });
 
   it("should delete employee", async () => {

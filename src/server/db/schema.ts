@@ -14,7 +14,7 @@ export const employees = mysqlTable(
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     firstName: varchar("first_name", { length: 256 }),
     lastName: varchar("last_name", { length: 256 }),
-    hireDate: timestamp("hire_date"),
+    hireDate: timestamp("hire_date", { mode: "date", fsp: 3 }),
     phone: varchar("phone", { length: 256 }),
     address: varchar("address", { length: 256 }),
   },
