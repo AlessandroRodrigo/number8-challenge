@@ -87,4 +87,29 @@ describe("Employee router", () => {
 
     expect(output).toHaveProperty("affectedRows", 1);
   });
+
+  it("should update employee", async () => {
+    const { caller, createMockedEmployee } = setup();
+
+    const employeeCreated = await createMockedEmployee();
+
+    if (!employeeCreated) {
+      throw new Error("Employee not created");
+    }
+
+    type Input = inferProcedureInput<AppRouter["employees"]["update"]>;
+
+    const input: Input = {
+      id: employeeCreated.id,
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      hireDate: faker.date.past(),
+      phone: faker.phone.number(),
+      address: faker.location.streetAddress(),
+    };
+
+    const output = await caller.employees.update(input);
+
+    expect(output).toEqual(input);
+  });
 });
