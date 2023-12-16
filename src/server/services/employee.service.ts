@@ -1,120 +1,77 @@
-import { eq } from "drizzle-orm";
-import { db } from "~/server/db";
-import { department, departmentEmployee, employees } from "~/server/db/schema";
+import { type IDepartmentRepository } from "~/server/entities/department/department.repository";
+import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
+import { type IEmployeeRepository } from "~/server/entities/employee/employee.repository";
+import { DepartmentRepository } from "~/server/repositories/drizzle/department.repository";
+import { EmployeeRepository } from "~/server/repositories/drizzle/employee.repository";
+import {
+  CreateEmployeeDto,
+  CreateEmployeeDtoType,
+} from "~/server/services/dto/employee/create-employee.dto";
+import {
+  UpdateEmployeeDto,
+  UpdateEmployeeDtoType,
+} from "~/server/services/dto/employee/update-employee.dto";
 
 export class EmployeeService {
-  async getAll() {
-    const result = await db
-      .select()
-      .from(departmentEmployee)
-      .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
-      .innerJoin(department, eq(departmentEmployee.departmentId, department.id))
-      .execute();
+  private employeeRepository: IEmployeeRepository = new EmployeeRepository();
+  private departmentRepository: IDepartmentRepository =
+    new DepartmentRepository();
 
-    return result.map((item) => ({
-      ...item.employee,
-      department: item.department,
-    }));
+  async getAll() {
+    return await this.employeeRepository.getAll();
   }
 
   async getById(id: number) {
-    const result = await db
-      .select()
-      .from(departmentEmployee)
-      .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
-      .innerJoin(department, eq(departmentEmployee.departmentId, department.id))
-      .where(eq(employees.id, id))
-      .limit(1)
-      .execute();
-
-    return {
-      ...result[0]?.employee,
-      department: result[0]?.department,
-    };
+    return await this.employeeRepository.getById(id);
   }
 
-  async create(input: {
-    firstName: string;
-    lastName: string;
-    hireDate: Date;
-    phone: string;
-    address: string;
-    departmentId: number;
-  }) {
-    const queryExecuted = await db.transaction(async (tx) => {
-      const queryExecuted = await tx
-        .insert(employees)
-        .values({
-          firstName: input.firstName,
-          lastName: input.lastName,
-          hireDate: input.hireDate,
-          phone: input.phone,
-          address: input.address,
-        })
-        .execute();
+  async create(input: CreateEmployeeDtoType) {
+    const parsedInput = CreateEmployeeDto.parse(input);
 
-      await tx
-        .insert(departmentEmployee)
-        .values({
-          departmentId: input.departmentId,
-          employeeId: queryExecuted[0].insertId,
-        })
-        .execute();
+    const department = await this.departmentRepository.getById(
+      parsedInput.departmentId,
+    );
 
-      return queryExecuted;
+    const employee = EmployeeFactory.create({
+      id: 0,
+      firstName: parsedInput.firstName,
+      lastName: parsedInput.lastName,
+      hireDate: parsedInput.hireDate,
+      phone: parsedInput.phone,
+      address: parsedInput.address,
+      department,
     });
 
-    return await db.query.employees.findFirst({
-      where(fields, operators) {
-        return operators.eq(fields.id, queryExecuted[0].insertId);
-      },
-    });
+    return await this.employeeRepository.create(employee);
   }
 
   async delete(id: number) {
-    return db.delete(employees).where(eq(employees.id, id)).execute();
+    return this.employeeRepository.delete(id);
   }
 
-  async update(input: {
-    id: number;
-    firstName?: string;
-    lastName?: string;
-    hireDate?: Date;
-    phone?: string;
-    address?: string;
-  }) {
-    await db
-      .update(employees)
-      .set({
-        firstName: input.firstName,
-        lastName: input.lastName,
-        hireDate: input.hireDate,
-        phone: input.phone,
-        address: input.address,
-      })
-      .where(eq(employees.id, input.id))
-      .execute();
+  async update(input: UpdateEmployeeDtoType) {
+    const parsedInput = UpdateEmployeeDto.parse(input);
 
-    return await db.query.employees.findFirst({
-      where(fields, operators) {
-        return operators.eq(fields.id, input.id);
-      },
+    const employeeFound = await this.employeeRepository.getById(parsedInput.id);
+
+    const employee = EmployeeFactory.create({
+      id: parsedInput.id,
+      firstName: parsedInput.firstName ?? employeeFound.firstName,
+      lastName: parsedInput.lastName ?? employeeFound.lastName,
+      hireDate: parsedInput.hireDate ?? employeeFound.hireDate,
+      phone: parsedInput.phone ?? employeeFound.phone,
+      address: parsedInput.address ?? employeeFound.address,
+      department: null,
     });
-  }
 
-  async updateDepartment(input: { id: number; departmentId: number }) {
-    await db
-      .update(departmentEmployee)
-      .set({
-        departmentId: input.departmentId,
-      })
-      .where(eq(departmentEmployee.employeeId, input.id))
-      .execute();
+    if (parsedInput.departmentId) {
+      const department = await this.departmentRepository.getById(
+        parsedInput.departmentId,
+      );
 
-    return await db.query.employees.findFirst({
-      where(fields, operators) {
-        return operators.eq(fields.id, input.id);
-      },
-    });
+      employee.setDepartment(department);
+    }
+
+    return await this.employeeRepository.update(employee);
   }
 }
