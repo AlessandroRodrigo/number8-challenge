@@ -4,8 +4,18 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { department, departmentEmployee, employees } from "~/server/db/schema";
 
 export const employeeRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.employees.findMany();
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const result = await ctx.db
+      .select()
+      .from(departmentEmployee)
+      .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
+      .innerJoin(department, eq(departmentEmployee.departmentId, department.id))
+      .execute();
+
+    return result.map((item) => ({
+      ...item.employee,
+      department: item.department.name,
+    }));
   }),
   getById: publicProcedure
     .input(

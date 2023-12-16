@@ -18,17 +18,41 @@ describe("Employee router", () => {
   });
 
   it("should get all employees", async () => {
-    const { caller, createMockedEmployee } = setup();
+    const {
+      caller,
+      createMockedEmployee,
+      createMockedDepartment,
+      createMockedDepartmentEmployeeRelation,
+    } = setup();
 
     const output = await caller.employees.getAll();
 
     expect(output).toEqual([]);
 
-    await createMockedEmployee();
+    const departmentCreated = await createMockedDepartment();
+    const employeeCreated = await createMockedEmployee();
+
+    if (!departmentCreated || !employeeCreated) {
+      throw new Error("Department or employee not created");
+    }
+
+    await createMockedDepartmentEmployeeRelation(
+      departmentCreated.id,
+      employeeCreated.id,
+    );
 
     const output2 = await caller.employees.getAll();
 
     expect(output2.length).toEqual(1);
+    expect(output2[0]).toEqual({
+      id: employeeCreated.id,
+      firstName: employeeCreated.firstName,
+      lastName: employeeCreated.lastName,
+      hireDate: employeeCreated.hireDate,
+      phone: employeeCreated.phone,
+      address: employeeCreated.address,
+      department: departmentCreated.name,
+    });
   });
 
   it("should get employee by id", async () => {
