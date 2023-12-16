@@ -52,7 +52,11 @@ async function createEmployee() {
 }
 
 async function cleanDatabase() {
-  await db.delete(employees);
+  await Promise.all([
+    db.delete(departmentEmployee),
+    db.delete(employees),
+    db.delete(department),
+  ]);
 }
 
 async function prepareEmployeeWithDepartment() {
