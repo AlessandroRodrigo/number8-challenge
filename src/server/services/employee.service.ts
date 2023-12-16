@@ -1,21 +1,23 @@
 import { type IDepartmentRepository } from "~/server/entities/department/department.repository";
 import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
 import { type IEmployeeRepository } from "~/server/entities/employee/employee.repository";
-import { DepartmentRepository } from "~/server/repositories/drizzle/department.repository";
-import { EmployeeRepository } from "~/server/repositories/drizzle/employee.repository";
 import {
   CreateEmployeeDto,
-  CreateEmployeeDtoType,
+  type CreateEmployeeDtoType,
 } from "~/server/services/dto/employee/create-employee.dto";
 import {
   UpdateEmployeeDto,
-  UpdateEmployeeDtoType,
+  type UpdateEmployeeDtoType,
 } from "~/server/services/dto/employee/update-employee.dto";
 
 export class EmployeeService {
-  private employeeRepository: IEmployeeRepository = new EmployeeRepository();
-  private departmentRepository: IDepartmentRepository =
-    new DepartmentRepository();
+  constructor(
+    private employeeRepository: IEmployeeRepository,
+    private departmentRepository: IDepartmentRepository,
+  ) {
+    this.employeeRepository = employeeRepository;
+    this.departmentRepository = departmentRepository;
+  }
 
   async getAll() {
     return await this.employeeRepository.getAll();
