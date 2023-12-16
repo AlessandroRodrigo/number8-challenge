@@ -38,8 +38,10 @@ export const departmentEmployee = mysqlTable("department_employee", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
   departmentId: bigint("department_id", { mode: "number" }).references(
     () => department.id,
+    { onDelete: "cascade", onUpdate: "cascade" },
   ),
   employeeId: bigint("employee_id", { mode: "number" }).references(
     () => employees.id,
+    { onDelete: "cascade", onUpdate: "cascade" },
   ),
 });

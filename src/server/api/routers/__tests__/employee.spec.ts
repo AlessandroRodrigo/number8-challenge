@@ -37,7 +37,13 @@ describe("Employee router", () => {
   });
 
   it("should create employee", async () => {
-    const { caller } = setup();
+    const { caller, createMockedDepartment } = setup();
+
+    const departmentCreated = await createMockedDepartment();
+
+    if (!departmentCreated) {
+      throw new Error("Department not created");
+    }
 
     const output = await caller.employees.create({
       firstName: "John",
@@ -45,6 +51,7 @@ describe("Employee router", () => {
       hireDate: new Date(),
       phone: "123456789",
       address: "123 Main St",
+      departmentId: departmentCreated.id,
     });
 
     expect(output).toMatchObject({

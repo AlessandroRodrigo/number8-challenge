@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { employees } from "~/server/db/schema";
+import { departmentEmployee, employees } from "~/server/db/schema";
 
 export const employeeRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -28,13 +28,32 @@ export const employeeRouter = createTRPCRouter({
         hireDate: z.date(),
         phone: z.string(),
         address: z.string(),
+        departmentId: z.number(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const queryExecuted = await ctx.db
-        .insert(employees)
-        .values(input)
-        .execute();
+      const queryExecuted = await ctx.db.transaction(async (tx) => {
+        const queryExecuted = await tx
+          .insert(employees)
+          .values({
+            firstName: input.firstName,
+            lastName: input.lastName,
+            hireDate: input.hireDate,
+            phone: input.phone,
+            address: input.address,
+          })
+          .execute();
+
+        await tx
+          .insert(departmentEmployee)
+          .values({
+            departmentId: input.departmentId,
+            employeeId: queryExecuted[0].insertId,
+          })
+          .execute();
+
+        return queryExecuted;
+      });
 
       return await ctx.db.query.employees.findFirst({
         where(fields, operators) {
