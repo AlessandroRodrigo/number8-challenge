@@ -1,8 +1,10 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { department } from "~/server/db/schema";
+import { DepartmentService } from "~/server/services/department.service";
+
+const service = new DepartmentService();
 
 export const departmentRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.select().from(department).execute();
+  getAll: publicProcedure.query(() => {
+    return service.getAll();
   }),
 });

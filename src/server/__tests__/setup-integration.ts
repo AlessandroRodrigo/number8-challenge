@@ -2,7 +2,11 @@ import { faker } from "@faker-js/faker";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
 import { db } from "~/server/db";
-import { department, departmentEmployee, employees } from "~/server/db/schema";
+import {
+  department,
+  departmentEmployee,
+  employees,
+} from "~/server/repositories/drizzle/schema";
 
 async function createDepartment() {
   const queryExecuted = await db
