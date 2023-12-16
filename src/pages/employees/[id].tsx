@@ -114,7 +114,6 @@ function DepartmentSelect({ value, onChange }: DepartmentSelectProps) {
 
   return (
     <Select
-      className="rounded border border-gray-200 px-2 py-1"
       value={value}
       onChange={(value) => {
         if (!value) return;
