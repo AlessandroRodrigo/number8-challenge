@@ -4,7 +4,7 @@ import { createInnerTRPCContext } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { department, departmentEmployee, employees } from "~/server/db/schema";
 
-async function createMockedDepartment() {
+async function createDepartment() {
   const queryExecuted = await db
     .insert(department)
     .values({
@@ -19,7 +19,7 @@ async function createMockedDepartment() {
   });
 }
 
-async function createMockedDepartmentEmployeeRelation(
+async function createDepartmentEmployeeRelation(
   departmentId: number,
   employeeId: number,
 ) {
@@ -32,7 +32,7 @@ async function createMockedDepartmentEmployeeRelation(
     .execute();
 }
 
-async function createMockedEmployee() {
+async function createEmployee() {
   const queryExecuted = await db
     .insert(employees)
     .values({
@@ -55,6 +55,25 @@ async function cleanDatabase() {
   await db.delete(employees);
 }
 
+async function prepareEmployeeWithDepartment() {
+  const departmentCreated = await createDepartment();
+  const employeeCreated = await createEmployee();
+
+  if (!departmentCreated || !employeeCreated) {
+    throw new Error("Department or employee not created");
+  }
+
+  await createDepartmentEmployeeRelation(
+    departmentCreated.id,
+    employeeCreated.id,
+  );
+
+  return {
+    departmentCreated,
+    employeeCreated,
+  };
+}
+
 export function setup() {
   const ctx = createInnerTRPCContext({});
   const caller = appRouter.createCaller(ctx);
@@ -62,9 +81,10 @@ export function setup() {
   return {
     caller,
     ctx,
-    createMockedEmployee,
-    createMockedDepartment,
-    createMockedDepartmentEmployeeRelation,
+    createEmployee,
+    createDepartment,
+    createDepartmentEmployeeRelation,
+    prepareEmployeeWithDepartment,
     cleanDatabase,
   };
 }

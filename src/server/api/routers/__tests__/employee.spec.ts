@@ -18,28 +18,14 @@ describe("Employee router", () => {
   });
 
   it("should get all employees", async () => {
-    const {
-      caller,
-      createMockedEmployee,
-      createMockedDepartment,
-      createMockedDepartmentEmployeeRelation,
-    } = setup();
+    const { caller, prepareEmployeeWithDepartment } = setup();
 
     const output = await caller.employees.getAll();
 
     expect(output).toEqual([]);
 
-    const departmentCreated = await createMockedDepartment();
-    const employeeCreated = await createMockedEmployee();
-
-    if (!departmentCreated || !employeeCreated) {
-      throw new Error("Department or employee not created");
-    }
-
-    await createMockedDepartmentEmployeeRelation(
-      departmentCreated.id,
-      employeeCreated.id,
-    );
+    const { departmentCreated, employeeCreated } =
+      await prepareEmployeeWithDepartment();
 
     const output2 = await caller.employees.getAll();
 
@@ -56,24 +42,10 @@ describe("Employee router", () => {
   });
 
   it("should get employee by id", async () => {
-    const {
-      caller,
-      createMockedEmployee,
-      createMockedDepartment,
-      createMockedDepartmentEmployeeRelation,
-    } = setup();
+    const { caller, prepareEmployeeWithDepartment } = setup();
 
-    const departmentCreated = await createMockedDepartment();
-    const employeeCreated = await createMockedEmployee();
-
-    if (!departmentCreated || !employeeCreated) {
-      throw new Error("Department or employee not created");
-    }
-
-    await createMockedDepartmentEmployeeRelation(
-      departmentCreated.id,
-      employeeCreated.id,
-    );
+    const { departmentCreated, employeeCreated } =
+      await prepareEmployeeWithDepartment();
 
     const output = await caller.employees.getById({ id: employeeCreated.id });
 
@@ -89,9 +61,9 @@ describe("Employee router", () => {
   });
 
   it("should create employee", async () => {
-    const { caller, createMockedDepartment } = setup();
+    const { caller, createDepartment } = setup();
 
-    const departmentCreated = await createMockedDepartment();
+    const departmentCreated = await createDepartment();
 
     if (!departmentCreated) {
       throw new Error("Department not created");
@@ -118,9 +90,9 @@ describe("Employee router", () => {
   });
 
   it("should delete employee", async () => {
-    const { caller, createMockedEmployee } = setup();
+    const { caller, createEmployee } = setup();
 
-    const employeeCreated = await createMockedEmployee();
+    const employeeCreated = await createEmployee();
 
     if (!employeeCreated) {
       throw new Error("Employee not created");
@@ -132,9 +104,9 @@ describe("Employee router", () => {
   });
 
   it("should update employee", async () => {
-    const { caller, createMockedEmployee } = setup();
+    const { caller, createEmployee } = setup();
 
-    const employeeCreated = await createMockedEmployee();
+    const employeeCreated = await createEmployee();
 
     if (!employeeCreated) {
       throw new Error("Employee not created");
