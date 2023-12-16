@@ -1,5 +1,4 @@
-import { beforeEach } from "node:test";
-import { afterAll, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { setup } from "~/server/__tests__/setup-integration";
 
 describe("Department router", () => {
@@ -9,7 +8,7 @@ describe("Department router", () => {
     await cleanDatabase();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     const { cleanDatabase } = setup();
 
     await cleanDatabase();
