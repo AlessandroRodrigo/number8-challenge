@@ -37,7 +37,7 @@ describe("Employee router", () => {
       hireDate: employeeCreated.hireDate,
       phone: employeeCreated.phone,
       address: employeeCreated.address,
-      department: departmentCreated.name,
+      department: departmentCreated,
     });
   });
 
@@ -56,7 +56,7 @@ describe("Employee router", () => {
       hireDate: employeeCreated.hireDate,
       phone: employeeCreated.phone,
       address: employeeCreated.address,
-      department: departmentCreated.name,
+      department: departmentCreated,
     });
   });
 
@@ -155,7 +155,7 @@ describe("Employee router", () => {
 
     const afterUser = await caller.employees.getById({ id: input.id });
 
-    expect(beforeUser).toHaveProperty("department", departmentCreated.name);
-    expect(afterUser).toHaveProperty("department", newDepartmentCreated.name);
+    expect(beforeUser).toHaveProperty("department", departmentCreated);
+    expect(afterUser).toHaveProperty("department", newDepartmentCreated);
   });
 });

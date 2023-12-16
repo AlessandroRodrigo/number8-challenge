@@ -1,21 +1,12 @@
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { department, departmentEmployee, employees } from "~/server/db/schema";
+import { EmployeeService } from "~/server/services/employee.service";
+
+const service = new EmployeeService();
 
 export const employeeRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    const result = await ctx.db
-      .select()
-      .from(departmentEmployee)
-      .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
-      .innerJoin(department, eq(departmentEmployee.departmentId, department.id))
-      .execute();
-
-    return result.map((item) => ({
-      ...item.employee,
-      department: item.department.name,
-    }));
+  getAll: publicProcedure.query(() => {
+    return service.getAll();
   }),
   getById: publicProcedure
     .input(
@@ -23,23 +14,8 @@ export const employeeRouter = createTRPCRouter({
         id: z.number(),
       }),
     )
-    .query(async ({ ctx, input }) => {
-      const result = await ctx.db
-        .select()
-        .from(departmentEmployee)
-        .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
-        .innerJoin(
-          department,
-          eq(departmentEmployee.departmentId, department.id),
-        )
-        .where(eq(employees.id, input.id))
-        .limit(1)
-        .execute();
-
-      return {
-        ...result[0]?.employee,
-        department: result[0]?.department,
-      };
+    .query(({ input }) => {
+      return service.getById(input.id);
     }),
   create: publicProcedure
     .input(
@@ -52,35 +28,8 @@ export const employeeRouter = createTRPCRouter({
         departmentId: z.number(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
-      const queryExecuted = await ctx.db.transaction(async (tx) => {
-        const queryExecuted = await tx
-          .insert(employees)
-          .values({
-            firstName: input.firstName,
-            lastName: input.lastName,
-            hireDate: input.hireDate,
-            phone: input.phone,
-            address: input.address,
-          })
-          .execute();
-
-        await tx
-          .insert(departmentEmployee)
-          .values({
-            departmentId: input.departmentId,
-            employeeId: queryExecuted[0].insertId,
-          })
-          .execute();
-
-        return queryExecuted;
-      });
-
-      return await ctx.db.query.employees.findFirst({
-        where(fields, operators) {
-          return operators.eq(fields.id, queryExecuted[0].insertId);
-        },
-      });
+    .mutation(({ input }) => {
+      return service.create(input);
     }),
   delete: publicProcedure
     .input(
@@ -88,11 +37,8 @@ export const employeeRouter = createTRPCRouter({
         id: z.number(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db
-        .delete(employees)
-        .where(eq(employees.id, input.id))
-        .execute();
+    .mutation(({ input }) => {
+      return service.delete(input.id);
     }),
   update: publicProcedure
     .input(
@@ -107,24 +53,8 @@ export const employeeRouter = createTRPCRouter({
         .partial()
         .extend({ id: z.number() }),
     )
-    .mutation(async ({ ctx, input }) => {
-      await ctx.db
-        .update(employees)
-        .set({
-          firstName: input.firstName,
-          lastName: input.lastName,
-          hireDate: input.hireDate,
-          phone: input.phone,
-          address: input.address,
-        })
-        .where(eq(employees.id, input.id))
-        .execute();
-
-      return await ctx.db.query.employees.findFirst({
-        where(fields, operators) {
-          return operators.eq(fields.id, input.id);
-        },
-      });
+    .mutation(({ input }) => {
+      return service.update(input);
     }),
   updateDepartment: publicProcedure
     .input(
@@ -133,19 +63,7 @@ export const employeeRouter = createTRPCRouter({
         departmentId: z.number(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
-      await ctx.db
-        .update(departmentEmployee)
-        .set({
-          departmentId: input.departmentId,
-        })
-        .where(eq(departmentEmployee.employeeId, input.id))
-        .execute();
-
-      return await ctx.db.query.employees.findFirst({
-        where(fields, operators) {
-          return operators.eq(fields.id, input.id);
-        },
-      });
+    .mutation(({ input }) => {
+      return service.updateDepartment(input);
     }),
 });
