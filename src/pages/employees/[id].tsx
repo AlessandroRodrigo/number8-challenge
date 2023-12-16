@@ -23,6 +23,9 @@ export default function EmployeeDetails() {
     },
   );
 
+  const shouldDisableUpdateDepartmentButton =
+    currentDepartment === data?.department?.id.toString();
+
   const { isLoading: isUpdating, mutateAsync: updateDepartment } =
     api.employees.updateDepartment.useMutation();
 
@@ -75,6 +78,7 @@ export default function EmployeeDetails() {
                     })
                   }
                   loading={isUpdating}
+                  disabled={shouldDisableUpdateDepartmentButton}
                 >
                   Update
                 </Button>
