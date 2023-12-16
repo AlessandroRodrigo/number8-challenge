@@ -12,11 +12,11 @@ export const employees = mysqlTable(
   "employee",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    firstName: varchar("first_name", { length: 256 }),
-    lastName: varchar("last_name", { length: 256 }),
-    hireDate: timestamp("hire_date", { mode: "date", fsp: 3 }),
-    phone: varchar("phone", { length: 256 }),
-    address: varchar("address", { length: 256 }),
+    firstName: varchar("first_name", { length: 256 }).notNull(),
+    lastName: varchar("last_name", { length: 256 }).notNull(),
+    hireDate: timestamp("hire_date", { mode: "date", fsp: 3 }).notNull(),
+    phone: varchar("phone", { length: 256 }).notNull(),
+    address: varchar("address", { length: 256 }).notNull(),
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.firstName, example.lastName),
