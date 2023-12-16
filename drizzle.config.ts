@@ -8,5 +8,5 @@ export default {
   dbCredentials: {
     connectionString: env.DATABASE_URL,
   },
-  tablesFilter: ["number8-challenge_*"],
+  tablesFilter: ["*"],
 } satisfies Config;
