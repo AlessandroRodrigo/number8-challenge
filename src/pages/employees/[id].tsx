@@ -19,7 +19,7 @@ export default function EmployeeDetails() {
         <title>Employee Details</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="m-auto flex min-h-screen w-6/12 flex-col gap-4">
+      <main className="m-auto flex min-h-screen w-6/12 flex-col gap-4 py-6">
         <h1 className="text-left text-4xl font-bold">Employee Details page</h1>
 
         <div className="flex gap-4 rounded-md border border-gray-200 p-4">
