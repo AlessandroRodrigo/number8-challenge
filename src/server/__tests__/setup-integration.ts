@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
 import { db } from "~/server/db";
@@ -7,7 +8,7 @@ async function createMockedDepartment() {
   const queryExecuted = await db
     .insert(department)
     .values({
-      name: "IT",
+      name: faker.commerce.department(),
     })
     .execute();
 
@@ -22,11 +23,11 @@ async function createMockedEmployee() {
   const queryExecuted = await db
     .insert(employees)
     .values({
-      firstName: "John",
-      lastName: "Doe",
-      hireDate: new Date(),
-      phone: "123456789",
-      address: "123 Main St",
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      hireDate: faker.date.past(),
+      phone: faker.phone.number(),
+      address: faker.location.streetAddress(),
     })
     .execute();
 
