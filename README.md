@@ -21,6 +21,8 @@ Given the nature of the challenge, I decided to apply great engineering principl
 - **SOLID** and **DRY**
 - **Clean Architecture**: You will se some aspects of the Clean Architecture in the project, like the separation of the business logic from the framework, the use of the Dependency Inversion Principle, and the use of the Dependency Injection pattern. The services could be splited even more into use cases to follow the Clean Architecture, but I decided to keep it simple.
 - **GoF Design Patterns**: I used the Factory Method pattern to create the entities, and the Adapter pattern to create basically everything on the server side.
+- **General Design Patterns**: I used the Dependency Injection pattern to handle with the dependencies of the application, and the Singleton pattern to handle with the database connection.
+- **DDD Patterns**: I used the Repository pattern to handle with the data persistence, and the Specification pattern to handle with the business rules.
 - **DDD**: I used the Domain Driven Design to handle with entities, value objects, repositories, and separation of concerns. Besides that, I also implemented a model of notification pattern to handle with errors and validations.
 - **TDD**: I used the Test Driven Development to develop the business logic of the application, and to ensure that the application is working as expected.
 - **In-Memory Repository**: I used an in-memory repository to store the data, but it could be easily replaced by a database repository, for example.
