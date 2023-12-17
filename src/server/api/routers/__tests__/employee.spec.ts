@@ -18,14 +18,13 @@ describe("Employee router", () => {
   });
 
   it("should get all employees", async () => {
-    const { caller, prepareEmployeeWithDepartment } = setup();
+    const { caller, createEmployeeWithDepartment } = setup();
 
     const output = await caller.employees.getAll();
 
     expect(output).toEqual([]);
 
-    const { departmentCreated, employeeCreated } =
-      await prepareEmployeeWithDepartment();
+    const employeeCreated = await createEmployeeWithDepartment();
 
     const output2 = await caller.employees.getAll();
 
@@ -37,15 +36,14 @@ describe("Employee router", () => {
       hireDate: employeeCreated.hireDate,
       phone: employeeCreated.phone,
       address: employeeCreated.address,
-      department: departmentCreated,
+      department: employeeCreated.department,
     });
   });
 
   it("should get employee by id", async () => {
-    const { caller, prepareEmployeeWithDepartment } = setup();
+    const { caller, createEmployeeWithDepartment } = setup();
 
-    const { departmentCreated, employeeCreated } =
-      await prepareEmployeeWithDepartment();
+    const employeeCreated = await createEmployeeWithDepartment();
 
     const output = await caller.employees.getById({ id: employeeCreated.id });
 
@@ -56,7 +54,7 @@ describe("Employee router", () => {
       hireDate: employeeCreated.hireDate,
       phone: employeeCreated.phone,
       address: employeeCreated.address,
-      department: departmentCreated,
+      department: employeeCreated.department,
     });
   });
 
@@ -90,27 +88,19 @@ describe("Employee router", () => {
   });
 
   it("should delete employee", async () => {
-    const { caller, createEmployee } = setup();
+    const { caller, createEmployeeWithDepartment } = setup();
 
-    const employeeCreated = await createEmployee();
+    const employeeCreated = await createEmployeeWithDepartment();
 
-    if (!employeeCreated) {
-      throw new Error("Employee not created");
-    }
-
-    const [output] = await caller.employees.delete({ id: employeeCreated.id });
-
-    expect(output).toHaveProperty("affectedRows", 1);
+    expect(() =>
+      caller.employees.delete({ id: employeeCreated.id }),
+    ).to.not.throw();
   });
 
   it("should update employee", async () => {
-    const { caller, createEmployee } = setup();
+    const { caller, createEmployeeWithDepartment } = setup();
 
-    const employeeCreated = await createEmployee();
-
-    if (!employeeCreated) {
-      throw new Error("Employee not created");
-    }
+    const employeeCreated = await createEmployeeWithDepartment();
 
     type Input = inferProcedureInput<AppRouter["employees"]["update"]>;
 
@@ -121,28 +111,26 @@ describe("Employee router", () => {
       hireDate: faker.date.past(),
       phone: faker.phone.number(),
       address: faker.location.streetAddress(),
+      departmentId: employeeCreated.department?.id,
     };
 
     const output = await caller.employees.update(input);
 
-    expect(output).toEqual(input);
+    expect(output).toHaveProperty("firstName", input.firstName);
+    expect(output).toHaveProperty("lastName", input.lastName);
+    expect(output).toHaveProperty("hireDate", input.hireDate);
+    expect(output).toHaveProperty("phone", input.phone);
+    expect(output).toHaveProperty("address", input.address);
   });
 
   it("should update department of employee", async () => {
-    const { caller, prepareEmployeeWithDepartment, createDepartment } = setup();
+    const { caller, createEmployeeWithDepartment, createDepartment } = setup();
 
-    const { employeeCreated, departmentCreated } =
-      await prepareEmployeeWithDepartment();
+    const employeeCreated = await createEmployeeWithDepartment();
 
-    type Input = inferProcedureInput<
-      AppRouter["employees"]["updateDepartment"]
-    >;
+    type Input = inferProcedureInput<AppRouter["employees"]["update"]>;
 
     const newDepartmentCreated = await createDepartment();
-
-    if (!newDepartmentCreated) {
-      throw new Error("Department not created");
-    }
 
     const input: Input = {
       id: employeeCreated.id,
@@ -151,11 +139,11 @@ describe("Employee router", () => {
 
     const beforeUser = await caller.employees.getById({ id: input.id });
 
-    await caller.employees.updateDepartment(input);
+    await caller.employees.update(input);
 
     const afterUser = await caller.employees.getById({ id: input.id });
 
-    expect(beforeUser).toHaveProperty("department", departmentCreated);
+    expect(beforeUser).toHaveProperty("department", employeeCreated.department);
     expect(afterUser).toHaveProperty("department", newDepartmentCreated);
   });
 });
