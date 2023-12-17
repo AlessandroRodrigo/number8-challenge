@@ -46,4 +46,6 @@ export const departmentEmployee = mysqlTable("department_employee", {
     () => employees.id,
     { onDelete: "cascade", onUpdate: "cascade" },
   ),
+  startDate: timestamp("start_date", { mode: "date", fsp: 3 }).notNull(),
+  endDate: timestamp("end_date", { mode: "date", fsp: 3 }),
 });

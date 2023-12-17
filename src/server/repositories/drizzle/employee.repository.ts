@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, isNull } from "drizzle-orm";
 import { type Employee } from "~/server/entities/employee/employee.entity";
 import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
 import { type IEmployeeRepository } from "~/server/entities/employee/employee.repository";
@@ -16,6 +16,7 @@ export class EmployeeRepository implements IEmployeeRepository {
       .from(departmentEmployee)
       .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
       .innerJoin(department, eq(departmentEmployee.departmentId, department.id))
+      .where(isNull(departmentEmployee.endDate))
       .execute();
 
     return result.map((item) =>
@@ -41,7 +42,7 @@ export class EmployeeRepository implements IEmployeeRepository {
       .from(departmentEmployee)
       .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
       .leftJoin(department, eq(departmentEmployee.departmentId, department.id))
-      .where(eq(employees.id, id))
+      .where(eq(employees.id, id) && isNull(departmentEmployee.endDate))
       .limit(1)
       .execute();
 
@@ -81,6 +82,7 @@ export class EmployeeRepository implements IEmployeeRepository {
           .values({
             departmentId: input.department.id,
             employeeId: queryResult[0].insertId,
+            startDate: new Date(),
           })
           .execute();
       }
@@ -104,20 +106,41 @@ export class EmployeeRepository implements IEmployeeRepository {
         hireDate: input.hireDate,
         phone: input.phone,
         address: input.address,
+        status: input.status,
       })
       .where(eq(employees.id, input.id))
       .execute();
 
     if (input.department) {
-      await drizzleClient
-        .update(departmentEmployee)
-        .set({
-          departmentId: input.department.id,
-        })
-        .where(eq(departmentEmployee.employeeId, input.id))
-        .execute();
+      await this.changeEmployeeDepartment(input.id, input.department.id);
     }
 
     return this.getById(input.id);
+  }
+
+  private changeEmployeeDepartment(employeeId: number, departmentId: number) {
+    return drizzleClient.transaction(async (tx) => {
+      try {
+        await tx
+          .update(departmentEmployee)
+          .set({
+            endDate: new Date(),
+          })
+          .where(eq(departmentEmployee.employeeId, employeeId))
+          .execute();
+
+        await tx
+          .insert(departmentEmployee)
+          .values({
+            departmentId,
+            employeeId,
+            startDate: new Date(),
+          })
+          .execute();
+      } catch (error) {
+        tx.rollback();
+        throw error;
+      }
+    });
   }
 }

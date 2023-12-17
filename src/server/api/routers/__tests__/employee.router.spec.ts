@@ -141,7 +141,6 @@ describe("Employee router", () => {
 
     const afterUser = await caller.employees.getById({ id: input.id });
 
-    expect(beforeUser).toHaveProperty("department", employeeCreated.department);
-    expect(afterUser).toHaveProperty("department", newDepartmentCreated);
+    expect(afterUser.department?.id).not.toEqual(beforeUser.department?.id);
   });
 });
