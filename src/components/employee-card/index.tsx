@@ -1,3 +1,4 @@
+import { Box, Button, Card, Flex, Text } from "@mantine/core";
 import { type inferProcedureOutput } from "@trpc/server";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,40 +11,46 @@ type Props = {
 
 export function EmployeeCard({ employee }: Props) {
   return (
-    <div className="flex gap-2 rounded-md border border-gray-200 p-4">
-      <div className="overflow-hidden rounded-md">
+    <Card withBorder>
+      <Flex gap="lg">
         <Image
           width={150}
           height={150}
           src="https://via.placeholder.com/150"
-          className="object-fill"
           alt="test"
+          style={{
+            borderRadius: 4,
+            objectFit: "cover",
+          }}
         />
-      </div>
 
-      <div className="flex flex-1 flex-col justify-between py-2">
-        <div className="flex items-baseline gap-2">
-          <span className="text-lg font-semibold">{employee.firstName}</span>
-          <span className="opacity-75">({employee.department})</span>
-        </div>
-
-        <div className="flex flex-col">
-          <span className="text-sm text-gray-500">Hire Date</span>
-          <span className="text-sm text-gray-700">
-            {EmployeeCardUtils.formatDate(employee.hireDate)} (
-            {EmployeeCardUtils.timeOfService(employee.hireDate)})
-          </span>
-        </div>
-      </div>
-
-      <div>
-        <Link
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          href={`/employees/${employee.id}`}
+        <Box
+          style={{
+            flex: 1,
+          }}
         >
-          View details
-        </Link>
-      </div>
-    </div>
+          <Flex align="baseline" gap="sm">
+            <Text size="lg" fw="bold">
+              {employee.firstName}
+            </Text>
+            <Text opacity={0.75}>({employee.department.name})</Text>
+          </Flex>
+
+          <Flex direction="column">
+            <Text>Hire Date</Text>
+            <Text>
+              {EmployeeCardUtils.formatDate(employee.hireDate)} (
+              {EmployeeCardUtils.timeOfService(employee.hireDate)})
+            </Text>
+          </Flex>
+        </Box>
+
+        <Box>
+          <Link href={`/employees/${employee.id}`} passHref>
+            <Button>View details</Button>
+          </Link>
+        </Box>
+      </Flex>
+    </Card>
   );
 }
