@@ -1,5 +1,7 @@
 import { type Employee } from "~/server/entities/employee/employee.entity";
+import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
 import { type IEmployeeRepository } from "~/server/entities/employee/employee.repository";
+import { DepartmentRegistry } from "~/server/entities/value-objects/department-registry/department-registry.value-object";
 
 export class InMemoryEmployeeRepository implements IEmployeeRepository {
   private employees: Employee[] = [];
@@ -23,7 +25,10 @@ export class InMemoryEmployeeRepository implements IEmployeeRepository {
   }
 
   async create(input: Omit<Employee, "id">): Promise<Employee> {
-    const employee = { ...input, id: this.employees.length + 1 };
+    const employee = EmployeeFactory.create({
+      ...input,
+      id: this.employees.length + 1,
+    });
 
     this.employees.push(employee);
 
@@ -52,5 +57,9 @@ export class InMemoryEmployeeRepository implements IEmployeeRepository {
     );
 
     return input;
+  }
+
+  getDepartmentRegistry(id: number): Promise<DepartmentRegistry[]> {
+    return Promise.resolve([]);
   }
 }

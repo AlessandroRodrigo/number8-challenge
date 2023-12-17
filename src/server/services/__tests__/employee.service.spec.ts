@@ -69,7 +69,19 @@ describe("Employee service", () => {
 
     const output = await service.getById(employeeCreated.id);
 
-    expect(output).toEqual(employeeCreated);
+    expect(output).toEqual({
+      id: employeeCreated.id,
+      firstName: employeeCreated.firstName,
+      lastName: employeeCreated.lastName,
+      hireDate: employeeCreated.hireDate,
+      phone: employeeCreated.phone,
+      address: employeeCreated.address,
+      department: {
+        id: departmentCreated.id,
+        name: departmentCreated.name,
+      },
+      status: employeeCreated.status,
+    });
   });
 
   it("should create employee", async () => {
@@ -97,13 +109,19 @@ describe("Employee service", () => {
 
     const output = await service.create(input);
 
-    expect(output).toHaveProperty("id");
-    expect(output).toHaveProperty("firstName", input.firstName);
-    expect(output).toHaveProperty("lastName", input.lastName);
-    expect(output).toHaveProperty("hireDate", input.hireDate);
-    expect(output).toHaveProperty("phone", input.phone);
-    expect(output).toHaveProperty("address", input.address);
-    expect(output).toHaveProperty("department", departmentCreated);
+    expect(output).toEqual({
+      id: output.id,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      hireDate: input.hireDate,
+      phone: input.phone,
+      address: input.address,
+      department: {
+        id: departmentCreated.id,
+        name: departmentCreated.name,
+      },
+      status: "active",
+    });
   });
 
   it("should delete employee", async () => {
@@ -173,12 +191,18 @@ describe("Employee service", () => {
 
     const output = await service.update(input);
 
-    expect(output).toHaveProperty("id", input.id);
-    expect(output).toHaveProperty("firstName", input.firstName);
-    expect(output).toHaveProperty("lastName", input.lastName);
-    expect(output).toHaveProperty("hireDate", input.hireDate);
-    expect(output).toHaveProperty("phone", input.phone);
-    expect(output).toHaveProperty("address", input.address);
-    expect(output).toHaveProperty("department", departmentCreated);
+    expect(output).toEqual({
+      id: input.id,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      hireDate: input.hireDate,
+      phone: input.phone,
+      address: input.address,
+      department: {
+        id: departmentCreated.id,
+        name: departmentCreated.name,
+      },
+      status: "active",
+    });
   });
 });
