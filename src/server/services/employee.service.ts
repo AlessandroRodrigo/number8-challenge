@@ -5,6 +5,9 @@ import {
   CreateEmployeeDto,
   type CreateEmployeeDtoType,
 } from "~/server/services/dto/employee/create-employee.dto";
+import { GetAllEmployeeOutputDto } from "~/server/services/dto/employee/get-all-employee.output-dto";
+import { GetDepartmentRegistryOutputDto } from "~/server/services/dto/employee/get-department-registry.output-dto";
+import { GetEmployeeByIdOutputDto } from "~/server/services/dto/employee/get-employee-by-id.output-dto";
 import {
   UpdateEmployeeDto,
   type UpdateEmployeeDtoType,
@@ -20,11 +23,13 @@ export class EmployeeService {
   }
 
   async getAll() {
-    return await this.employeeRepository.getAll();
+    const result = await this.employeeRepository.getAll();
+    return GetAllEmployeeOutputDto.parse(result);
   }
 
   async getById(id: number) {
-    return await this.employeeRepository.getById(id);
+    const result = await this.employeeRepository.getById(id);
+    return GetEmployeeByIdOutputDto.parse(result);
   }
 
   async create(input: CreateEmployeeDtoType) {
@@ -44,7 +49,8 @@ export class EmployeeService {
       status: "active",
     });
 
-    return await this.employeeRepository.create(employee);
+    const result = await this.employeeRepository.create(employee);
+    return GetEmployeeByIdOutputDto.parse(result);
   }
 
   async delete(id: number) {
@@ -88,10 +94,12 @@ export class EmployeeService {
       }
     }
 
-    return await this.employeeRepository.update(employee);
+    const result = await this.employeeRepository.update(employee);
+    return GetEmployeeByIdOutputDto.parse(result);
   }
 
   async getDepartmentRegistry(id: number) {
-    return await this.employeeRepository.getDepartmentRegistry(id);
+    const result = await this.employeeRepository.getDepartmentRegistry(id);
+    return GetDepartmentRegistryOutputDto.parse(result);
   }
 }

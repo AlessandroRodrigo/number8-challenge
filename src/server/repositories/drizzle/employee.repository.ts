@@ -1,4 +1,4 @@
-import { eq, isNull } from "drizzle-orm";
+import { desc, eq, isNull } from "drizzle-orm";
 import { DepartmentFactory } from "~/server/entities/department/department.factory";
 import { type Employee } from "~/server/entities/employee/employee.entity";
 import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
@@ -127,6 +127,7 @@ export class EmployeeRepository implements IEmployeeRepository {
       .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
       .innerJoin(department, eq(departmentEmployee.departmentId, department.id))
       .where(eq(employees.id, id))
+      .orderBy(desc(departmentEmployee.startDate))
       .execute();
 
     return result.map((item) =>
