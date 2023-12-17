@@ -33,6 +33,9 @@ export function EmployeeDetailCard(employee: Props) {
         void apiUtils.employees.getById.refetch({
           id: employee.id,
         });
+        void apiUtils.employees.getDepartmentRegistry.refetch({
+          employeeId: employee.id,
+        });
       },
     });
 
