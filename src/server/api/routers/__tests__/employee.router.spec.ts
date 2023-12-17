@@ -29,15 +29,14 @@ describe("Employee router", () => {
     const output2 = await caller.employees.getAll();
 
     expect(output2.length).toEqual(1);
-    expect(output2[0]).toEqual({
-      id: employeeCreated.id,
-      firstName: employeeCreated.firstName,
-      lastName: employeeCreated.lastName,
-      hireDate: employeeCreated.hireDate,
-      phone: employeeCreated.phone,
-      address: employeeCreated.address,
-      department: employeeCreated.department,
-    });
+    expect(output2[0]).toHaveProperty("id", employeeCreated.id);
+    expect(output2[0]).toHaveProperty("firstName", employeeCreated.firstName);
+    expect(output2[0]).toHaveProperty("lastName", employeeCreated.lastName);
+    expect(output2[0]).toHaveProperty("hireDate", employeeCreated.hireDate);
+    expect(output2[0]).toHaveProperty("phone", employeeCreated.phone);
+    expect(output2[0]).toHaveProperty("address", employeeCreated.address);
+    expect(output2[0]).toHaveProperty("department", employeeCreated.department);
+    expect(output2[0]).toHaveProperty("status", employeeCreated.status);
   });
 
   it("should get employee by id", async () => {
@@ -47,15 +46,14 @@ describe("Employee router", () => {
 
     const output = await caller.employees.getById({ id: employeeCreated.id });
 
-    expect(output).toEqual({
-      id: employeeCreated.id,
-      firstName: employeeCreated.firstName,
-      lastName: employeeCreated.lastName,
-      hireDate: employeeCreated.hireDate,
-      phone: employeeCreated.phone,
-      address: employeeCreated.address,
-      department: employeeCreated.department,
-    });
+    expect(output).toHaveProperty("id", employeeCreated.id);
+    expect(output).toHaveProperty("firstName", employeeCreated.firstName);
+    expect(output).toHaveProperty("lastName", employeeCreated.lastName);
+    expect(output).toHaveProperty("hireDate", employeeCreated.hireDate);
+    expect(output).toHaveProperty("phone", employeeCreated.phone);
+    expect(output).toHaveProperty("address", employeeCreated.address);
+    expect(output).toHaveProperty("department", employeeCreated.department);
+    expect(output).toHaveProperty("status", employeeCreated.status);
   });
 
   it("should create employee", async () => {
