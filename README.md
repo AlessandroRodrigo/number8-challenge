@@ -13,6 +13,10 @@ This is challenge was made using the following technologies:
 - [Drizzle](https://orm.drizzle.team/)
 - [Zod](https://zod.dev/)
 - [MySQL](https://www.mysql.com/)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+- [Faker.js](https://fakerjs.dev/)
+- [Day.js](https://day.js.org/)
 
 ### Principles applied
 
