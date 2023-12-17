@@ -39,12 +39,12 @@ export class EmployeeRepository implements IEmployeeRepository {
       .select()
       .from(departmentEmployee)
       .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
-      .innerJoin(department, eq(departmentEmployee.departmentId, department.id))
+      .leftJoin(department, eq(departmentEmployee.departmentId, department.id))
       .where(eq(employees.id, id))
       .limit(1)
       .execute();
 
-    if (!result[0]?.employee && !result[0]?.department) {
+    if (!result[0]?.employee) {
       throw new Error("Employee not found");
     }
 
@@ -55,10 +55,7 @@ export class EmployeeRepository implements IEmployeeRepository {
       hireDate: result[0]?.employee.hireDate,
       phone: result[0]?.employee.phone,
       address: result[0]?.employee.address,
-      department: {
-        id: result[0]?.department.id,
-        name: result[0]?.department.name,
-      },
+      department: result[0]?.department,
     });
   }
 

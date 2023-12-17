@@ -26,8 +26,13 @@ export class DepartmentRepository implements IDepartmentRepository {
 
     return DepartmentFactory.create(result[0]);
   }
-  create(input: Department): Promise<Department> {
-    throw new Error("Method not implemented.");
+  async create(input: Omit<Department, "id">): Promise<Department> {
+    const result = await drizzleClient
+      .insert(department)
+      .values(input)
+      .execute();
+
+    return this.getById(result[0].insertId);
   }
   delete(id: number): Promise<void> {
     throw new Error("Method not implemented.");
