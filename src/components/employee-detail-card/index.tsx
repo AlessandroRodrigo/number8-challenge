@@ -1,6 +1,14 @@
-import { Button, Card, Flex, Stack, Text, Title } from "@mantine/core";
+import {
+  Avatar,
+  Button,
+  Card,
+  Flex,
+  Indicator,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import Image from "next/image";
 import { useState } from "react";
 import { DepartmentSelect } from "~/components/department-select";
 import { api } from "~/utils/api";
@@ -72,25 +80,33 @@ export function EmployeeDetailCard(employee: Props) {
   return (
     <Card padding="lg" radius="md" withBorder>
       <Flex gap="md">
-        <Image
-          width={250}
-          height={250}
-          src="https://via.placeholder.com/500"
-          alt="placeholder-image"
-        />
+        <div>
+          <Indicator
+            inline
+            label={employee.status === "active" ? "Active" : "Inactive"}
+            color={employee.status === "active" ? "teal" : "red"}
+            size="24"
+            position="bottom-center"
+          >
+            <Avatar
+              size="xl"
+              radius="sm"
+              src="https://via.placeholder.com/500"
+              alt="placeholder-image"
+            />
+          </Indicator>
+        </div>
 
         <Flex direction="column" gap="md">
           <Text size="lg" fw="bold">
             {fullName}
           </Text>
-
           <Flex direction="column" className="text-sm text-gray-700">
             <span>Employee ID: {employee.id}</span>
             <span>Department: {employee.department?.name}</span>
             <span>Telephone: {employee.phone}</span>
             <span>Address: {employee.address}</span>
           </Flex>
-
           <Stack gap="sm">
             <DepartmentSelect value={department} onChange={setDepartment} />
             <Button
@@ -103,7 +119,7 @@ export function EmployeeDetailCard(employee: Props) {
           </Stack>
         </Flex>
 
-        <Stack ml="auto">
+        <Stack ml="auto" gap={0}>
           <Title order={5}>Hire Date</Title>
           <Stack className="flex flex-col">
             <Flex gap="sm">
