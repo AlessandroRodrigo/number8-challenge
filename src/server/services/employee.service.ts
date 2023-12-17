@@ -41,6 +41,7 @@ export class EmployeeService {
       phone: parsedInput.phone,
       address: parsedInput.address,
       department,
+      status: "active",
     });
 
     return await this.employeeRepository.create(employee);
@@ -63,6 +64,7 @@ export class EmployeeService {
       phone: parsedInput.phone ?? employeeFound.phone,
       address: parsedInput.address ?? employeeFound.address,
       department: null,
+      status: employeeFound.status,
     });
 
     if (parsedInput.departmentId) {
@@ -71,6 +73,11 @@ export class EmployeeService {
       );
 
       employee.setDepartment(department);
+    }
+
+    if (parsedInput.status) {
+      if (parsedInput.status === "active") employee.activate();
+      else employee.inactivate();
     }
 
     return await this.employeeRepository.update(employee);

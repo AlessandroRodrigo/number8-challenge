@@ -8,6 +8,7 @@ export const UpdateEmployeeDto = z.object({
   phone: z.string().min(3).max(255).optional(),
   address: z.string().min(3).max(255).optional(),
   departmentId: z.number().int().optional(),
+  status: z.enum(["active", "inactive"]).optional(),
 });
 
 export type UpdateEmployeeDtoType = z.infer<typeof UpdateEmployeeDto>;
