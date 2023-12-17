@@ -1,7 +1,9 @@
 import { eq, isNull } from "drizzle-orm";
+import { DepartmentFactory } from "~/server/entities/department/department.factory";
 import { type Employee } from "~/server/entities/employee/employee.entity";
 import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
 import { type IEmployeeRepository } from "~/server/entities/employee/employee.repository";
+import { DepartmentRegistryFactory } from "~/server/entities/value-objects/department-registry/department-registry.factory";
 import { drizzleClient } from "~/server/repositories/drizzle/client";
 import {
   department,
@@ -116,6 +118,27 @@ export class EmployeeRepository implements IEmployeeRepository {
     }
 
     return this.getById(input.id);
+  }
+
+  async getDepartmentRegistry(id: number) {
+    const result = await drizzleClient
+      .select()
+      .from(departmentEmployee)
+      .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
+      .innerJoin(department, eq(departmentEmployee.departmentId, department.id))
+      .where(eq(employees.id, id))
+      .execute();
+
+    return result.map((item) =>
+      DepartmentRegistryFactory.create({
+        department: DepartmentFactory.create({
+          id: item.department.id,
+          name: item.department.name,
+        }),
+        startDate: item.department_employee.startDate,
+        endDate: item.department_employee.endDate,
+      }),
+    );
   }
 
   private changeEmployeeDepartment(employeeId: number, departmentId: number) {

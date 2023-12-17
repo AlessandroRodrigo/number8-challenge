@@ -143,4 +143,37 @@ describe("Employee router", () => {
 
     expect(afterUser.department?.id).not.toEqual(beforeUser.department?.id);
   });
+
+  it.only("should retrieve department registry of employee", async () => {
+    const { caller, createEmployeeWithDepartment, createDepartment } = setup();
+
+    const employeeCreated = await createEmployeeWithDepartment();
+    const newDepartmentCreated = await createDepartment();
+
+    await caller.employees.update({
+      id: employeeCreated.id,
+      departmentId: newDepartmentCreated.id,
+    });
+
+    const output = await caller.employees.getDepartmentRegistry({
+      employeeId: employeeCreated.id,
+    });
+
+    expect(output.length).toEqual(2);
+    // expect(output[0]).toHaveProperty("department", newDepartmentCreated);
+    // expect(output[0]).toHaveProperty(
+    //   "department.name",
+    //   employeeCreated.department?.name,
+    // );
+    // expect(output[0]).toHaveProperty("startDate");
+    // expect(output[0]).toHaveProperty("endDate", null);
+
+    // expect(output[1]).toHaveProperty("department.id", newDepartmentCreated.id);
+    // expect(output[1]).toHaveProperty(
+    //   "department.name",
+    //   newDepartmentCreated.name,
+    // );
+    // expect(output[1]).toHaveProperty("startDate");
+    // expect(output[1]).toHaveProperty("endDate", null);
+  });
 });

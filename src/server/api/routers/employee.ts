@@ -39,4 +39,13 @@ export const employeeRouter = createTRPCRouter({
   update: publicProcedure.input(UpdateEmployeeDto).mutation(({ input }) => {
     return service.update(input);
   }),
+  getDepartmentRegistry: publicProcedure
+    .input(
+      z.object({
+        employeeId: z.number(),
+      }),
+    )
+    .query(({ input }) => {
+      return service.getDepartmentRegistry(input.employeeId);
+    }),
 });

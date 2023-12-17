@@ -90,4 +90,8 @@ export class EmployeeService {
 
     return await this.employeeRepository.update(employee);
   }
+
+  async getDepartmentRegistry(id: number) {
+    return await this.employeeRepository.getDepartmentRegistry(id);
+  }
 }
