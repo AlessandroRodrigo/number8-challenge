@@ -1,38 +1,19 @@
 import { notifications } from "@mantine/notifications";
+import { type inferProcedureOutput } from "@trpc/server";
 import { createContext, useState, type PropsWithChildren } from "react";
+import { type AppRouter } from "~/server/api/root";
 import { api } from "~/utils/api";
 
 type EmployeeDetailContextProps = {
   department: string;
   employee: {
     fullName: string;
-    data:
-      | {
-          id: number;
-          firstName: string;
-          lastName: string;
-          department: {
-            id: number;
-            name: string;
-          };
-          phone: string;
-          address: string;
-          hireDate: Date;
-          status: string;
-        }
-      | undefined;
+    data: inferProcedureOutput<AppRouter["employees"]["getById"]> | undefined;
     isLoading: boolean;
   };
   departmentRegistry: {
     data:
-      | {
-          department: {
-            id: number;
-            name: string;
-          };
-          startDate: Date;
-          endDate: Date | null;
-        }[]
+      | inferProcedureOutput<AppRouter["employees"]["getDepartmentRegistry"]>
       | undefined;
     isLoading: boolean;
   };
