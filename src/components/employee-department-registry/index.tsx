@@ -1,6 +1,6 @@
 import { Card, Loader, Table } from "@mantine/core";
-import { EmployeeCardUtils } from "~/components/employee-card/employee-card.utils";
 import { api } from "~/utils/api";
+import { DateUtils } from "~/utils/date";
 
 type Props = {
   id: number;
@@ -30,11 +30,10 @@ export function EmployeeDepartmentRegistry({ id }: Props) {
                 {registry.department.name}
               </Table.Th>
               <Table.Th p="md" fw="normal">
-                {EmployeeCardUtils.formatDate(registry.startDate)}
+                {DateUtils.formatDate(registry.startDate)}
               </Table.Th>
               <Table.Th p="md" fw="normal">
-                {(registry.endDate &&
-                  EmployeeCardUtils.formatDate(registry.endDate)) ??
+                {(registry.endDate && DateUtils.formatDate(registry.endDate)) ??
                   "Present"}
               </Table.Th>
             </Table.Tr>

@@ -3,8 +3,8 @@ import { notifications } from "@mantine/notifications";
 import Image from "next/image";
 import { useState } from "react";
 import { DepartmentSelect } from "~/components/department-select";
-import { EmployeeCardUtils } from "~/components/employee-card/employee-card.utils";
 import { api } from "~/utils/api";
+import { DateUtils } from "~/utils/date";
 
 type Props = {
   id: number;
@@ -109,11 +109,9 @@ export function EmployeeDetailCard(employee: Props) {
           <Stack className="flex flex-col">
             <Flex gap="sm">
               <span className="text-sm text-gray-700">
-                {EmployeeCardUtils.formatDate(employee.hireDate)}
+                {DateUtils.formatDate(employee.hireDate)}
               </span>
-              <span>
-                ({EmployeeCardUtils.timeOfService(employee.hireDate)})
-              </span>
+              <span>({DateUtils.timeOfService(employee.hireDate)})</span>
             </Flex>
 
             <Button
