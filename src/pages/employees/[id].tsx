@@ -7,7 +7,6 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { IconArrowLeft } from "@tabler/icons-react";
 import Head from "next/head";
 import Link from "next/link";
@@ -37,46 +36,6 @@ export default function EmployeeDetails() {
   );
 
   const employeeFullName = `${employeeData?.firstName} ${employeeData?.lastName}`;
-
-  const departmentHasChanged =
-    currentDepartment === employeeData?.department?.id.toString();
-
-  const { isLoading: isUpdating, mutateAsync: updateEmployee } =
-    api.employees.update.useMutation({
-      onSuccess() {
-        void refetchEmployeeData();
-      },
-    });
-
-  async function handleToggleStatus() {
-    if (!employeeData?.id) return;
-
-    await updateEmployee({
-      id: employeeData?.id,
-      status: employeeData?.status === "active" ? "inactive" : "active",
-    });
-
-    notifications.show({
-      title: "Employee status updated",
-      message: "Employee status has been updated successfully",
-      color: "teal",
-    });
-  }
-
-  async function handleDepartmentChange() {
-    if (!employeeData?.id) return;
-
-    await updateEmployee({
-      id: employeeData?.id,
-      departmentId: Number(currentDepartment),
-    });
-
-    notifications.show({
-      title: "Employee department updated",
-      message: "Employee department has been updated successfully",
-      color: "teal",
-    });
-  }
 
   if (isLoading) return <div>Loading...</div>;
 
