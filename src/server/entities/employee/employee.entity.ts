@@ -1,6 +1,7 @@
 import { type Department } from "~/server/entities/department/department.entity";
+import { type Entity } from "~/server/entities/entity.abstract";
 
-export class Employee {
+export class Employee implements Entity {
   public department: Department | null = null;
 
   constructor(

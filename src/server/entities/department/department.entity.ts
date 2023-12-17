@@ -1,4 +1,6 @@
-export class Department {
+import { type Entity } from "~/server/entities/entity.abstract";
+
+export class Department implements Entity {
   id: number;
   name: string;
 
