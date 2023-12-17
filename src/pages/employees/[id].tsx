@@ -4,6 +4,7 @@ import {
   Card,
   Container,
   Flex,
+  Loader,
   Text,
   Title,
 } from "@mantine/core";
@@ -37,7 +38,7 @@ export default function EmployeeDetails() {
 
   const employeeFullName = `${employeeData?.firstName} ${employeeData?.lastName}`;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
 
   return (
     <>
