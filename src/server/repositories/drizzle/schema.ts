@@ -1,6 +1,7 @@
 import {
   bigint,
   index,
+  mysqlEnum,
   mysqlTableCreator,
   timestamp,
   varchar,
@@ -17,6 +18,7 @@ export const employees = mysqlTable(
     hireDate: timestamp("hire_date", { mode: "date", fsp: 3 }).notNull(),
     phone: varchar("phone", { length: 256 }).notNull(),
     address: varchar("address", { length: 256 }).notNull(),
+    status: mysqlEnum("status", ["active", "inactive"]).notNull(),
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.firstName, example.lastName),
