@@ -6,6 +6,7 @@ This is challenge was made using the following technologies:
 
 - [React](https://reactjs.org/)
 - [Next.js](https://nextjs.org/)
+- [Node.js](https://nodejs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Mantine UI](https://mantine.dev/)
 - [Vitest](https://vitest.dev/)
