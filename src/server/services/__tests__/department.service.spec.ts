@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { DepartmentFactory } from "~/server/entities/department/department.factory";
 import { InMemoryDepartmentRepository } from "~/server/repositories/in-memory/department.repository";
 import { DepartmentService } from "~/server/services/department.service";
 
@@ -11,9 +12,11 @@ describe("Department service", () => {
 
     expect(output).toEqual([]);
 
-    await repository.create({
-      name: "Department name",
-    });
+    await repository.create(
+      DepartmentFactory.create({
+        name: "Department name",
+      }),
+    );
 
     const output2 = await service.getAll();
 

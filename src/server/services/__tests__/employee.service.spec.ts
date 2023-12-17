@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { DepartmentFactory } from "~/server/entities/department/department.factory";
 import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
 import { InMemoryDepartmentRepository } from "~/server/repositories/in-memory/department.repository";
 import { InMemoryEmployeeRepository } from "~/server/repositories/in-memory/employee.repository";
@@ -17,9 +18,11 @@ describe("Employee service", () => {
 
     expect(output).toEqual([]);
 
-    const departmentCreated = await departmentRepository.create({
-      name: "Department name",
-    });
+    const departmentCreated = await departmentRepository.create(
+      DepartmentFactory.create({
+        name: "Department name",
+      }),
+    );
 
     await employeeRepository.create(
       EmployeeFactory.create({
@@ -29,6 +32,7 @@ describe("Employee service", () => {
         phone: "Phone",
         address: "Address",
         department: departmentCreated,
+        status: "active",
       }),
     );
 
@@ -45,9 +49,11 @@ describe("Employee service", () => {
       departmentRepository,
     );
 
-    const departmentCreated = await departmentRepository.create({
-      name: "Department name",
-    });
+    const departmentCreated = await departmentRepository.create(
+      DepartmentFactory.create({
+        name: "Department name",
+      }),
+    );
 
     const employeeCreated = await employeeRepository.create(
       EmployeeFactory.create({
@@ -57,6 +63,7 @@ describe("Employee service", () => {
         phone: "Phone",
         address: "Address",
         department: departmentCreated,
+        status: "active",
       }),
     );
 
@@ -73,9 +80,11 @@ describe("Employee service", () => {
       departmentRepository,
     );
 
-    const departmentCreated = await departmentRepository.create({
-      name: "Department name",
-    });
+    const departmentCreated = await departmentRepository.create(
+      DepartmentFactory.create({
+        name: "Department name",
+      }),
+    );
 
     const input: Parameters<typeof service.create>[0] = {
       firstName: "First name",
@@ -105,9 +114,11 @@ describe("Employee service", () => {
       departmentRepository,
     );
 
-    const departmentCreated = await departmentRepository.create({
-      name: "Department name",
-    });
+    const departmentCreated = await departmentRepository.create(
+      DepartmentFactory.create({
+        name: "Department name",
+      }),
+    );
 
     const employeeCreated = await employeeRepository.create(
       EmployeeFactory.create({
@@ -117,6 +128,7 @@ describe("Employee service", () => {
         phone: "Phone",
         address: "Address",
         department: departmentCreated,
+        status: "active",
       }),
     );
 
@@ -131,9 +143,11 @@ describe("Employee service", () => {
       departmentRepository,
     );
 
-    const departmentCreated = await departmentRepository.create({
-      name: "Department name",
-    });
+    const departmentCreated = await departmentRepository.create(
+      DepartmentFactory.create({
+        name: "Department name",
+      }),
+    );
 
     const employeeCreated = await employeeRepository.create(
       EmployeeFactory.create({
@@ -143,6 +157,7 @@ describe("Employee service", () => {
         phone: "Phone",
         address: "Address",
         department: departmentCreated,
+        status: "active",
       }),
     );
 
