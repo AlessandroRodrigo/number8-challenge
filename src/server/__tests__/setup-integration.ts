@@ -1,85 +1,55 @@
 import { faker } from "@faker-js/faker";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
-import { db } from "~/server/db";
-import {
-  department,
-  departmentEmployee,
-  employees,
-} from "~/server/repositories/drizzle/schema";
+import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
+import { InMemoryDepartmentRepository } from "~/server/repositories/in-memory/department.repository";
+import { InMemoryEmployeeRepository } from "~/server/repositories/in-memory/employee.repository";
+
+const departmentRepository = new InMemoryDepartmentRepository();
+const employeeRepository = new InMemoryEmployeeRepository();
 
 async function createDepartment() {
-  const queryExecuted = await db
-    .insert(department)
-    .values({
-      name: faker.commerce.department(),
-    })
-    .execute();
-
-  return await db.query.department.findFirst({
-    where(fields, operators) {
-      return operators.eq(fields.id, queryExecuted[0].insertId);
-    },
+  return await departmentRepository.create({
+    name: faker.commerce.department(),
   });
 }
 
-async function createDepartmentEmployeeRelation(
-  departmentId: number,
-  employeeId: number,
-) {
-  await db
-    .insert(departmentEmployee)
-    .values({
-      departmentId,
-      employeeId,
-    })
-    .execute();
+async function createEmployeeWithoutDepartment() {
+  const employee = EmployeeFactory.create({
+    id: 0,
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    hireDate: faker.date.past(),
+    phone: faker.phone.number(),
+    address: faker.location.streetAddress(),
+    department: null,
+  });
+
+  return employeeRepository.create(employee);
 }
 
-async function createEmployee() {
-  const queryExecuted = await db
-    .insert(employees)
-    .values({
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName(),
-      hireDate: faker.date.past(),
-      phone: faker.phone.number(),
-      address: faker.location.streetAddress(),
-    })
-    .execute();
+async function createEmployeeWithDepartment() {
+  const department = await createDepartment();
 
-  return await db.query.employees.findFirst({
-    where(fields, operators) {
-      return operators.eq(fields.id, queryExecuted[0].insertId);
+  const employee = EmployeeFactory.create({
+    id: 0,
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    hireDate: faker.date.past(),
+    phone: faker.phone.number(),
+    address: faker.location.streetAddress(),
+    department: {
+      id: department.id,
+      name: department.name,
     },
   });
+
+  return employeeRepository.create(employee);
 }
 
 async function cleanDatabase() {
-  await db.transaction(async (tx) => {
-    await tx.delete(departmentEmployee).execute();
-    await tx.delete(employees).execute();
-    await tx.delete(department).execute();
-  });
-}
-
-async function prepareEmployeeWithDepartment() {
-  const departmentCreated = await createDepartment();
-  const employeeCreated = await createEmployee();
-
-  if (!departmentCreated || !employeeCreated) {
-    throw new Error("Department or employee not created");
-  }
-
-  await createDepartmentEmployeeRelation(
-    departmentCreated.id,
-    employeeCreated.id,
-  );
-
-  return {
-    departmentCreated,
-    employeeCreated,
-  };
+  departmentRepository.clean();
+  employeeRepository.clean();
 }
 
 export function setup() {
@@ -89,10 +59,11 @@ export function setup() {
   return {
     caller,
     ctx,
-    createEmployee,
     createDepartment,
-    createDepartmentEmployeeRelation,
-    prepareEmployeeWithDepartment,
     cleanDatabase,
+    createEmployeeWithoutDepartment,
+    createEmployeeWithDepartment,
+    departmentRepository,
+    employeeRepository,
   };
 }
