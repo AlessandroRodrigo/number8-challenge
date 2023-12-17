@@ -47,7 +47,7 @@ export function EmployeeDetailCard() {
           <Text size="lg" fw="bold">
             {employee.fullName}
           </Text>
-          <Flex direction="column" className="text-sm text-gray-700">
+          <Flex direction="column">
             <span>Employee ID: {employee.data?.id}</span>
             <span>Department: {employee.data?.department?.name}</span>
             <span>Telephone: {employee.data?.phone}</span>
@@ -67,11 +67,9 @@ export function EmployeeDetailCard() {
 
         <Stack ml="auto" gap={0}>
           <Title order={5}>Hire Date</Title>
-          <Stack className="flex flex-col">
+          <Stack>
             <Flex gap="sm">
-              <span className="text-sm text-gray-700">
-                {DateUtils.formatDate(employee.data?.hireDate)}
-              </span>
+              <span>{DateUtils.formatDate(employee.data?.hireDate)}</span>
               <span>({DateUtils.timeOfService(employee.data?.hireDate)})</span>
             </Flex>
 
