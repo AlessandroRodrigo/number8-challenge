@@ -1,17 +1,9 @@
-import {
-  ActionIcon,
-  Box,
-  Card,
-  Container,
-  Flex,
-  Loader,
-  Text,
-  Title,
-} from "@mantine/core";
+import { ActionIcon, Box, Container, Flex, Loader, Title } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { EmployeeDepartmentRegistry } from "~/components/employee-department-registry";
 import { EmployeeDetailCard } from "~/components/employee-detail-card";
 import { api } from "~/utils/api";
 
@@ -56,9 +48,7 @@ export default function EmployeeDetails() {
             Employee's department history
           </Title>
 
-          <Card withBorder>
-            <Text>Table</Text>
-          </Card>
+          {employeeData && <EmployeeDepartmentRegistry id={employeeData.id} />}
         </Box>
       </Container>
     </>
