@@ -66,6 +66,21 @@ export default function EmployeeDetails() {
     });
   }
 
+  async function handleDepartmentChange() {
+    if (!employeeData?.id) return;
+
+    await updateEmployee({
+      id: employeeData?.id,
+      departmentId: Number(currentDepartment),
+    });
+
+    notifications.show({
+      title: "Employee department updated",
+      message: "Employee department has been updated successfully",
+      color: "teal",
+    });
+  }
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -114,12 +129,7 @@ export default function EmployeeDetails() {
                   onChange={(value) => setCurrentDepartment(value)}
                 />
                 <Button
-                  onClick={() =>
-                    updateEmployee({
-                      id: Number(query.id),
-                      departmentId: Number(currentDepartment),
-                    })
-                  }
+                  onClick={handleDepartmentChange}
                   loading={isUpdating}
                   disabled={departmentHasChanged}
                 >
