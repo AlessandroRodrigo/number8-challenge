@@ -12,27 +12,18 @@ import { IconArrowLeft } from "@tabler/icons-react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { EmployeeDetailCard } from "~/components/employee-detail-card";
 import { api } from "~/utils/api";
 
 export default function EmployeeDetails() {
-  const [currentDepartment, setCurrentDepartment] = useState("");
   const { query } = useRouter();
 
-  const {
-    isLoading,
-    data: employeeData,
-    refetch: refetchEmployeeData,
-  } = api.employees.getById.useQuery(
+  const { isLoading, data: employeeData } = api.employees.getById.useQuery(
     {
       id: Number(query.id),
     },
     {
       enabled: !!query.id,
-      onSuccess: (data) => {
-        setCurrentDepartment(data.department.id.toString());
-      },
     },
   );
 
