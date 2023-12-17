@@ -150,7 +150,6 @@ export function EmployeeDetailProvider({
         },
         departmentHasChanged,
         isUpdating: updateEmployeeMutation.isLoading,
-
         setDepartment,
         handleDepartmentChange,
         handleToggleStatus,
