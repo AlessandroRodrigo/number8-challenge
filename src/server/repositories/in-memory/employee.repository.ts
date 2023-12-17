@@ -4,6 +4,10 @@ import { type IEmployeeRepository } from "~/server/entities/employee/employee.re
 export class InMemoryEmployeeRepository implements IEmployeeRepository {
   private employees: Employee[] = [];
 
+  clean() {
+    this.employees = [];
+  }
+
   async getAll(): Promise<Employee[]> {
     return this.employees;
   }

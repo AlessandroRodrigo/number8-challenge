@@ -4,6 +4,10 @@ import { type IDepartmentRepository } from "~/server/entities/department/departm
 export class InMemoryDepartmentRepository implements IDepartmentRepository {
   private departments: Department[] = [];
 
+  clean() {
+    this.departments = [];
+  }
+
   async getAll(): Promise<Department[]> {
     return this.departments;
   }
