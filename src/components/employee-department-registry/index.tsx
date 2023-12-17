@@ -1,17 +1,9 @@
-import { Card, Loader, Table } from "@mantine/core";
-import { api } from "~/utils/api";
+import { Card, Table } from "@mantine/core";
+import { useEmployeeDetailContext } from "~/hooks/use-employee-detail-context";
 import { DateUtils } from "~/utils/date";
 
-type Props = {
-  id: number;
-};
-
-export function EmployeeDepartmentRegistry({ id }: Props) {
-  const { isLoading, data } = api.employees.getDepartmentRegistry.useQuery({
-    employeeId: id,
-  });
-
-  if (isLoading) return <Loader />;
+export function EmployeeDepartmentRegistry() {
+  const { departmentRegistry } = useEmployeeDetailContext();
 
   return (
     <Card withBorder p={0}>
@@ -24,7 +16,7 @@ export function EmployeeDepartmentRegistry({ id }: Props) {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data?.map((registry, index) => (
+          {departmentRegistry.data?.map((registry, index) => (
             <Table.Tr key={index}>
               <Table.Th p="md" fw="normal">
                 {registry.department.name}
