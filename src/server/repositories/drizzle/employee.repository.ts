@@ -1,4 +1,4 @@
-import { desc, eq, isNull } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import { DepartmentFactory } from "~/server/entities/department/department.factory";
 import { type Employee } from "~/server/entities/employee/employee.entity";
 import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
@@ -44,7 +44,7 @@ export class EmployeeRepository implements IEmployeeRepository {
       .from(departmentEmployee)
       .innerJoin(employees, eq(employees.id, departmentEmployee.employeeId))
       .leftJoin(department, eq(departmentEmployee.departmentId, department.id))
-      .where(eq(employees.id, id) && isNull(departmentEmployee.endDate))
+      .where(and(eq(employees.id, id), isNull(departmentEmployee.endDate)))
       .limit(1)
       .execute();
 

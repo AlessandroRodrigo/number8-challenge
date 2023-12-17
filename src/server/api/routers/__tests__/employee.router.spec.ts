@@ -36,17 +36,17 @@ describe("Employee router", () => {
     const { caller, createEmployeeWithDepartment } = setup();
 
     const employeeCreated = await createEmployeeWithDepartment();
+    const employeeCreated2 = await createEmployeeWithDepartment();
 
     const output = await caller.employees.getById({ id: employeeCreated.id });
 
-    expect(output).toHaveProperty("id", employeeCreated.id);
-    expect(output).toHaveProperty("firstName", employeeCreated.firstName);
-    expect(output).toHaveProperty("lastName", employeeCreated.lastName);
-    expect(output).toHaveProperty("hireDate", employeeCreated.hireDate);
-    expect(output).toHaveProperty("phone", employeeCreated.phone);
-    expect(output).toHaveProperty("address", employeeCreated.address);
-    expect(output).toHaveProperty("department", employeeCreated.department);
-    expect(output).toHaveProperty("status", employeeCreated.status);
+    expect(output).toEqual(employeeCreated);
+
+    const output2 = await caller.employees.getById({
+      id: employeeCreated2.id,
+    });
+
+    expect(output2).toEqual(employeeCreated2);
   });
 
   it("should create employee", async () => {
