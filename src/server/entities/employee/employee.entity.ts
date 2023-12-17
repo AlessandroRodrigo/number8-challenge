@@ -1,5 +1,7 @@
 import { Entity } from "~/server/entities/@shared/entity.abstract";
+import NotificationError from "~/server/entities/@shared/notification/notification-error";
 import { type Department } from "~/server/entities/department/department.entity";
+import { EmployeeValidatorFactory } from "~/server/entities/employee/employee-validator.factory";
 
 export type EmployeeStatus = "active" | "inactive";
 
@@ -23,6 +25,12 @@ export class Employee extends Entity {
     this.phone = phone;
     this.address = address;
     this.status = status;
+
+    this.validate();
+
+    if (this.notification.hasErrors()) {
+      throw new NotificationError(this.notification.getErrors());
+    }
   }
 
   public setDepartment(department: Department) {
@@ -38,6 +46,6 @@ export class Employee extends Entity {
   }
 
   validate(): void {
-    throw new Error("Method not implemented.");
+    EmployeeValidatorFactory.createZodValidator().validate(this);
   }
 }
