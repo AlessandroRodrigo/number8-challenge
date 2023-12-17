@@ -76,8 +76,16 @@ export class EmployeeService {
     }
 
     if (parsedInput.status) {
-      if (parsedInput.status === "active") employee.activate();
-      else employee.inactivate();
+      switch (parsedInput.status) {
+        case "active":
+          employee.activate();
+          break;
+        case "inactive":
+          employee.inactivate();
+          break;
+        default:
+          throw new Error("Invalid status");
+      }
     }
 
     return await this.employeeRepository.update(employee);
