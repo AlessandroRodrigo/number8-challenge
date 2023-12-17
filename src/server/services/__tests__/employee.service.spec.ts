@@ -23,7 +23,6 @@ describe("Employee service", () => {
 
     await employeeRepository.create(
       EmployeeFactory.create({
-        id: 0,
         firstName: "First name",
         lastName: "Last name",
         hireDate: new Date(),
@@ -52,7 +51,6 @@ describe("Employee service", () => {
 
     const employeeCreated = await employeeRepository.create(
       EmployeeFactory.create({
-        id: 0,
         firstName: "First name",
         lastName: "Last name",
         hireDate: new Date(),
@@ -113,7 +111,6 @@ describe("Employee service", () => {
 
     const employeeCreated = await employeeRepository.create(
       EmployeeFactory.create({
-        id: 0,
         firstName: "First name",
         lastName: "Last name",
         hireDate: new Date(),
@@ -140,7 +137,6 @@ describe("Employee service", () => {
 
     const employeeCreated = await employeeRepository.create(
       EmployeeFactory.create({
-        id: 0,
         firstName: "First name",
         lastName: "Last name",
         hireDate: new Date(),

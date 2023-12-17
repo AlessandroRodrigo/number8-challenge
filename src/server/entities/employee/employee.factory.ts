@@ -1,9 +1,9 @@
-import { Department } from "~/server/entities/department/department.entity";
+import { type Department } from "~/server/entities/department/department.entity";
 import { Employee } from "~/server/entities/employee/employee.entity";
 
 export class EmployeeFactory {
   static create(input: {
-    id: number;
+    id?: number;
     firstName: string;
     lastName: string;
     hireDate: Date;
@@ -12,7 +12,7 @@ export class EmployeeFactory {
     department: Department | null;
   }) {
     const employee = new Employee(
-      input.id,
+      input.id ?? 0,
       input.firstName,
       input.lastName,
       input.hireDate,

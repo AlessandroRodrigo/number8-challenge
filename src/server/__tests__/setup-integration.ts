@@ -20,7 +20,6 @@ async function createEmployeeWithDepartment() {
   const department = await createDepartment();
 
   const employee = EmployeeFactory.create({
-    id: 0,
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     hireDate: faker.date.past(),

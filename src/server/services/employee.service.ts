@@ -35,7 +35,6 @@ export class EmployeeService {
     );
 
     const employee = EmployeeFactory.create({
-      id: 0,
       firstName: parsedInput.firstName,
       lastName: parsedInput.lastName,
       hireDate: parsedInput.hireDate,
