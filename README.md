@@ -1,28 +1,32 @@
-# Create T3 App
+<!-- write a brief about the number8 challenge -->
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## Number8 Challenge
 
-## What's next? How do I make an app with this?
+This is challenge was made using the following technologies:
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- [React](https://reactjs.org/)
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Mantine UI](https://mantine.dev/)
+- [Vitest](https://vitest.dev/)
+- [tRPC](https://trpc.io/)
+- [Drizzle](https://orm.drizzle.team/)
+- [Zod](https://zod.dev/)
+- [MySQL](https://www.mysql.com/)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### Principles applied
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Given the nature of the challenge, I decided to apply great engineering principles to the project, but considering the time I had to deliver it, I decided to focus on the following:
 
-## Learn More
+- **SOLID** and **DRY**
+- **Clean Architecture**: You will se some aspects of the Clean Architecture in the project, like the separation of the business logic from the framework, the use of the Dependency Inversion Principle, and the use of the Dependency Injection pattern. The services could be splited even more into use cases to follow the Clean Architecture, but I decided to keep it simple.
+- **DDD**: I used the Domain Driven Design to handle with entities, value objects, repositories, and separation of concerns. Besides that, I also implemented a model of notification pattern to handle with errors and validations.
+- **TDD**: I used the Test Driven Development to develop the business logic of the application, and to ensure that the application is working as expected.
+- **In-Memory Repository**: I used an in-memory repository to store the data, but it could be easily replaced by a database repository, for example.
+- **Clean Code**: I tried to keep the code as clean as possible, following the best practices of the industry.
+- **Clean Commit**: I tried to keep the commits as clean as possible, following the best practices of the industry.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Disclaimers
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- **Disclaimer about tRPC**: I used tRPC just to create the rest layer of the application.
+- **Disclaimer about React Context API**: I used the React Context API, like the challenge description said, but I really didn't like the result. I would prefer to uso other approach, like the ReactQuery cache management, for example. The application doesn't have a lot of states to explain the use of a state management like Context and it hurts the separation of concerns, everything could be handled with a little of dependency injection.
