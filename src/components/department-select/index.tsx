@@ -13,6 +13,7 @@ export function DepartmentSelect({ value, onChange }: Props) {
 
   return (
     <Select
+      label="Select a department"
       value={value}
       onChange={(value) => {
         if (!value) return;

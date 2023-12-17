@@ -91,8 +91,7 @@ export function EmployeeDetailCard(employee: Props) {
             <span>Address: {employee.address}</span>
           </Flex>
 
-          <div className="flex flex-col gap-2">
-            <span>Update department</span>
+          <Stack gap="sm">
             <DepartmentSelect value={department} onChange={setDepartment} />
             <Button
               onClick={handleDepartmentChange}
@@ -101,7 +100,7 @@ export function EmployeeDetailCard(employee: Props) {
             >
               Update
             </Button>
-          </div>
+          </Stack>
         </Flex>
 
         <Stack ml="auto">
