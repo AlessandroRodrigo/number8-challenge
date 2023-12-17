@@ -2,8 +2,8 @@ import { Box, Button, Card, Flex, Text } from "@mantine/core";
 import { type inferProcedureOutput } from "@trpc/server";
 import Image from "next/image";
 import Link from "next/link";
-import { EmployeeCardUtils } from "~/components/employee-card/employee-card.utils";
 import { type AppRouter } from "~/server/api/root";
+import { DateUtils } from "~/utils/date";
 
 type Props = {
   employee: inferProcedureOutput<AppRouter["employees"]["getById"]>;
@@ -39,8 +39,8 @@ export function EmployeeCard({ employee }: Props) {
           <Flex direction="column">
             <Text>Hire Date</Text>
             <Text>
-              {EmployeeCardUtils.formatDate(employee.hireDate)} (
-              {EmployeeCardUtils.timeOfService(employee.hireDate)})
+              {DateUtils.formatDate(employee.hireDate)} (
+              {DateUtils.timeOfService(employee.hireDate)})
             </Text>
           </Flex>
         </Box>
