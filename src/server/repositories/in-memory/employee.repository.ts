@@ -1,7 +1,7 @@
 import { type Employee } from "~/server/entities/employee/employee.entity";
 import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
 import { type IEmployeeRepository } from "~/server/entities/employee/employee.repository";
-import { DepartmentRegistry } from "~/server/entities/value-objects/department-registry/department-registry.value-object";
+import { type DepartmentRegistry } from "~/server/entities/value-objects/department-registry/department-registry.value-object";
 
 export class InMemoryEmployeeRepository implements IEmployeeRepository {
   private employees: Employee[] = [];
@@ -52,9 +52,16 @@ export class InMemoryEmployeeRepository implements IEmployeeRepository {
       throw new Error("Employee not found");
     }
 
-    this.employees = this.employees.map((item) =>
-      item.id === input.id ? input : item,
-    );
+    this.employees = this.employees.map((item) => {
+      if (item.id === input.id) {
+        return EmployeeFactory.create({
+          ...item,
+          ...input,
+        });
+      }
+
+      return item;
+    });
 
     return input;
   }

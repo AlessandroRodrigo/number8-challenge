@@ -205,4 +205,103 @@ describe("Employee service", () => {
       status: "active",
     });
   });
+
+  it("should update employee status", async () => {
+    const employeeRepository = new InMemoryEmployeeRepository();
+    const departmentRepository = new InMemoryDepartmentRepository();
+    const service = new EmployeeService(
+      employeeRepository,
+      departmentRepository,
+    );
+
+    const departmentCreated = await departmentRepository.create(
+      DepartmentFactory.create({
+        name: "Department name",
+      }),
+    );
+
+    const employeeCreated = await employeeRepository.create(
+      EmployeeFactory.create({
+        firstName: "First name",
+        lastName: "Last name",
+        hireDate: new Date(),
+        phone: "Phone",
+        address: "Address",
+        department: departmentCreated,
+        status: "active",
+      }),
+    );
+
+    const output = await service.update({
+      ...employeeCreated,
+      status: "inactive",
+      departmentId: departmentCreated.id,
+    });
+
+    expect(output).toEqual({
+      id: employeeCreated.id,
+      firstName: employeeCreated.firstName,
+      lastName: employeeCreated.lastName,
+      hireDate: employeeCreated.hireDate,
+      phone: employeeCreated.phone,
+      address: employeeCreated.address,
+      department: {
+        id: departmentCreated.id,
+        name: departmentCreated.name,
+      },
+      status: "inactive",
+    });
+  });
+
+  it("should change employee department", async () => {
+    const employeeRepository = new InMemoryEmployeeRepository();
+    const departmentRepository = new InMemoryDepartmentRepository();
+    const service = new EmployeeService(
+      employeeRepository,
+      departmentRepository,
+    );
+
+    const departmentCreated = await departmentRepository.create(
+      DepartmentFactory.create({
+        name: "Department name",
+      }),
+    );
+
+    const departmentCreated2 = await departmentRepository.create(
+      DepartmentFactory.create({
+        name: "Department name 2",
+      }),
+    );
+
+    const employeeCreated = await employeeRepository.create(
+      EmployeeFactory.create({
+        firstName: "First name",
+        lastName: "Last name",
+        hireDate: new Date(),
+        phone: "Phone",
+        address: "Address",
+        department: departmentCreated,
+        status: "active",
+      }),
+    );
+
+    const output = await service.update({
+      ...employeeCreated,
+      departmentId: departmentCreated2.id,
+    });
+
+    expect(output).toEqual({
+      id: employeeCreated.id,
+      firstName: employeeCreated.firstName,
+      lastName: employeeCreated.lastName,
+      hireDate: employeeCreated.hireDate,
+      phone: employeeCreated.phone,
+      address: employeeCreated.address,
+      department: {
+        id: departmentCreated2.id,
+        name: departmentCreated2.name,
+      },
+      status: "active",
+    });
+  });
 });
