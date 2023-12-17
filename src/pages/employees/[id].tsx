@@ -1,6 +1,19 @@
-import { Button, Card, Flex, Select, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Card,
+  Container,
+  Flex,
+  Select,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { IconArrowLeft } from "@tabler/icons-react";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { EmployeeCardUtils } from "~/components/employee-card/employee-card.utils";
@@ -10,58 +23,88 @@ export default function EmployeeDetails() {
   const [currentDepartment, setCurrentDepartment] = useState("");
   const { query } = useRouter();
 
-  const { isLoading, data } = api.employees.getById.useQuery(
+  const {
+    isLoading,
+    data: employeeData,
+    refetch: refetchEmployeeData,
+  } = api.employees.getById.useQuery(
     {
       id: Number(query.id),
     },
     {
       enabled: !!query.id,
       onSuccess: (data) => {
-        if (!data.department) return;
         setCurrentDepartment(data.department.id.toString());
       },
     },
   );
 
-  const shouldDisableUpdateDepartmentButton =
-    currentDepartment === data?.department?.id.toString();
+  const employeeFullName = `${employeeData?.firstName} ${employeeData?.lastName}`;
 
-  const { isLoading: isUpdating, mutateAsync: updateDepartment } =
-    api.employees.updateDepartment.useMutation();
+  const departmentHasChanged =
+    currentDepartment === employeeData?.department?.id.toString();
+
+  const { isLoading: isUpdating, mutateAsync: updateEmployee } =
+    api.employees.update.useMutation({
+      onSuccess(data, variables, context) {
+        void refetchEmployeeData();
+      },
+    });
+
+  async function handleToggleStatus() {
+    if (!employeeData?.id) return;
+
+    await updateEmployee({
+      id: employeeData?.id,
+      status: employeeData?.status === "active" ? "inactive" : "active",
+    });
+
+    notifications.show({
+      title: "Employee status updated",
+      message: "Employee status has been updated successfully",
+      color: "teal",
+    });
+  }
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <>
       <Head>
-        <title>Employee Details</title>
+        <title>{employeeFullName} - Employee Details</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="m-auto flex min-h-screen w-6/12 flex-col gap-4 py-6">
-        <h1 className="text-left text-4xl font-bold">Employee Details page</h1>
+      <Container component="main">
+        <Flex align="baseline" gap="md">
+          <Link href="/" passHref>
+            <ActionIcon variant="transparent" color="dark">
+              <IconArrowLeft size={20} />
+            </ActionIcon>
+          </Link>
+          <Title order={1} py="lg">
+            {employeeFullName} details
+          </Title>
+        </Flex>
 
         <Card padding="lg" radius="md" withBorder>
           <Flex gap="md">
-            <div className="overflow-hidden rounded-md">
-              <Image
-                width={250}
-                height={250}
-                src="https://via.placeholder.com/500"
-                className="object-fill"
-                alt="test"
-              />
-            </div>
+            <Image
+              width={250}
+              height={250}
+              src="https://via.placeholder.com/500"
+              alt="placeholder-image"
+            />
 
             <Flex direction="column" gap="md">
               <Text size="lg" fw="bold">
-                {data?.firstName} {data?.lastName}
+                {employeeFullName}
               </Text>
 
               <Flex direction="column" className="text-sm text-gray-700">
-                <span>Employee ID: {data?.id}</span>
-                <span>Department: {data?.department?.name}</span>
-                <span>Telephone: {data?.phone}</span>
-                <span>Address: {data?.address}</span>
+                <span>Employee ID: {employeeData?.id}</span>
+                <span>Department: {employeeData?.department?.name}</span>
+                <span>Telephone: {employeeData?.phone}</span>
+                <span>Address: {employeeData?.address}</span>
               </Flex>
 
               <div className="flex flex-col gap-2">
@@ -72,36 +115,44 @@ export default function EmployeeDetails() {
                 />
                 <Button
                   onClick={() =>
-                    updateDepartment({
+                    updateEmployee({
                       id: Number(query.id),
                       departmentId: Number(currentDepartment),
                     })
                   }
                   loading={isUpdating}
-                  disabled={shouldDisableUpdateDepartmentButton}
+                  disabled={departmentHasChanged}
                 >
                   Update
                 </Button>
               </div>
             </Flex>
 
-            <div className="ml-auto flex flex-col">
-              <h2>Hire Date</h2>
+            <Stack ml="auto">
+              <Title order={5}>Hire Date</Title>
+              <Stack className="flex flex-col">
+                <Flex gap="sm">
+                  <span className="text-sm text-gray-700">
+                    {EmployeeCardUtils.formatDate(employeeData?.hireDate)}
+                  </span>
+                  <span>
+                    ({EmployeeCardUtils.timeOfService(employeeData?.hireDate)})
+                  </span>
+                </Flex>
 
-              <div className="flex flex-col">
-                <span className="text-sm text-gray-700">
-                  {EmployeeCardUtils.formatDate(data?.hireDate)}
-                </span>
-                <span>({EmployeeCardUtils.timeOfService(data?.hireDate)})</span>
-
-                <button className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700">
-                  Deactivate
-                </button>
-              </div>
-            </div>
+                <Button
+                  onClick={handleToggleStatus}
+                  color={employeeData?.status === "active" ? "red" : "teal"}
+                >
+                  {employeeData?.status === "active"
+                    ? "Deactivate"
+                    : "Activate"}
+                </Button>
+              </Stack>
+            </Stack>
           </Flex>
         </Card>
-      </main>
+      </Container>
     </>
   );
 }
