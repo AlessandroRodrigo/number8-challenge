@@ -7,6 +7,7 @@ import { drizzleClient } from "~/server/repositories/drizzle/client";
 import { DepartmentRepository } from "~/server/repositories/drizzle/department.repository";
 import { EmployeeRepository } from "~/server/repositories/drizzle/employee.repository";
 import { department, employees } from "~/server/repositories/drizzle/schema";
+import { GetEmployeeByIdOutputDto } from "~/server/services/dto/employee/get-employee-by-id.output-dto";
 
 const departmentRepository = new DepartmentRepository();
 const employeeRepository = new EmployeeRepository();
@@ -35,7 +36,9 @@ async function createEmployeeWithDepartment() {
     status: "active",
   });
 
-  return employeeRepository.create(employee);
+  return GetEmployeeByIdOutputDto.parse(
+    await employeeRepository.create(employee),
+  );
 }
 
 async function cleanDatabase() {

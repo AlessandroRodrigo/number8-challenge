@@ -29,14 +29,7 @@ describe("Employee router", () => {
     const output2 = await caller.employees.getAll();
 
     expect(output2.length).toEqual(1);
-    expect(output2[0]).toHaveProperty("id", employeeCreated.id);
-    expect(output2[0]).toHaveProperty("firstName", employeeCreated.firstName);
-    expect(output2[0]).toHaveProperty("lastName", employeeCreated.lastName);
-    expect(output2[0]).toHaveProperty("hireDate", employeeCreated.hireDate);
-    expect(output2[0]).toHaveProperty("phone", employeeCreated.phone);
-    expect(output2[0]).toHaveProperty("address", employeeCreated.address);
-    expect(output2[0]).toHaveProperty("department", employeeCreated.department);
-    expect(output2[0]).toHaveProperty("status", employeeCreated.status);
+    expect(output2[0]).toEqual(employeeCreated);
   });
 
   it("should get employee by id", async () => {
@@ -83,6 +76,7 @@ describe("Employee router", () => {
     expect(output).toHaveProperty("hireDate", input.hireDate);
     expect(output).toHaveProperty("phone", input.phone);
     expect(output).toHaveProperty("address", input.address);
+    expect(output.department.id).toEqual(departmentCreated.id);
   });
 
   it("should delete employee", async () => {
@@ -144,7 +138,7 @@ describe("Employee router", () => {
     expect(afterUser.department?.id).not.toEqual(beforeUser.department?.id);
   });
 
-  it.only("should retrieve department registry of employee", async () => {
+  it("should retrieve department registry of employee", async () => {
     const { caller, createEmployeeWithDepartment, createDepartment } = setup();
 
     const employeeCreated = await createEmployeeWithDepartment();
@@ -160,20 +154,30 @@ describe("Employee router", () => {
     });
 
     expect(output.length).toEqual(2);
-    // expect(output[0]).toHaveProperty("department", newDepartmentCreated);
-    // expect(output[0]).toHaveProperty(
-    //   "department.name",
-    //   employeeCreated.department?.name,
-    // );
-    // expect(output[0]).toHaveProperty("startDate");
-    // expect(output[0]).toHaveProperty("endDate", null);
+    expect(output[0]).toHaveProperty("department");
+    expect(output[0]).toHaveProperty("startDate");
+    expect(output[0]).toHaveProperty("endDate");
+  });
 
-    // expect(output[1]).toHaveProperty("department.id", newDepartmentCreated.id);
-    // expect(output[1]).toHaveProperty(
-    //   "department.name",
-    //   newDepartmentCreated.name,
-    // );
-    // expect(output[1]).toHaveProperty("startDate");
-    // expect(output[1]).toHaveProperty("endDate", null);
+  it("should retrieve the current employee department first", async () => {
+    const { caller, createEmployeeWithDepartment, createDepartment } = setup();
+
+    const employeeCreated = await createEmployeeWithDepartment();
+    const newDepartmentCreated = await createDepartment();
+
+    await caller.employees.update({
+      id: employeeCreated.id,
+      departmentId: newDepartmentCreated.id,
+    });
+
+    const output = await caller.employees.getDepartmentRegistry({
+      employeeId: employeeCreated.id,
+    });
+
+    expect(output.length).toEqual(2);
+    expect(output[0]).toHaveProperty("department");
+    expect(output[0]).toHaveProperty("startDate");
+    expect(output[0]).toHaveProperty("endDate", null);
+    expect(output[0]?.department.id).toEqual(newDepartmentCreated.id);
   });
 });
