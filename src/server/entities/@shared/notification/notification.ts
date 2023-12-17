@@ -15,13 +15,13 @@ export default class Notification {
     return this.errors;
   }
 
-  messages(context?: string): string {
-    let message = "";
-    this.errors.forEach((error) => {
-      if (context === undefined || error.context === context) {
-        message += `${error.context}: ${error.message},`;
-      }
-    });
-    return message;
+  messages(context?: string): string[] {
+    if (context) {
+      return this.errors
+        .filter((error) => error.context === context)
+        .map((error) => `${error.context}: ${error.message}`);
+    }
+
+    return this.errors.map((error) => `${error.context}: ${error.message}`);
   }
 }
