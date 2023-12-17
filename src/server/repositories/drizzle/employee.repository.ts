@@ -10,13 +10,6 @@ import {
 } from "~/server/repositories/drizzle/schema";
 
 export class EmployeeRepository implements IEmployeeRepository {
-  updateDepartment(input: {
-    id: number;
-    departmentId: number;
-  }): Promise<Employee> {
-    throw new Error("Method not implemented.");
-  }
-
   async getAll(): Promise<Employee[]> {
     const result = await drizzleClient
       .select()
@@ -69,25 +62,33 @@ export class EmployeeRepository implements IEmployeeRepository {
     });
   }
 
-  async create(input: {
-    firstName: string;
-    lastName: string;
-    hireDate: Date;
-    phone: string;
-    address: string;
-  }): Promise<Employee> {
-    const queryExecuted = await drizzleClient
-      .insert(employees)
-      .values({
-        firstName: input.firstName,
-        lastName: input.lastName,
-        hireDate: input.hireDate,
-        phone: input.phone,
-        address: input.address,
-      })
-      .execute();
+  async create(input: Employee): Promise<Employee> {
+    const employeeCreatedId = await drizzleClient.transaction(async (tx) => {
+      const queryResult = await tx
+        .insert(employees)
+        .values({
+          firstName: input.firstName,
+          lastName: input.lastName,
+          hireDate: input.hireDate,
+          phone: input.phone,
+          address: input.address,
+        })
+        .execute();
 
-    return this.getById(queryExecuted[0].insertId);
+      if (input.department) {
+        await tx
+          .insert(departmentEmployee)
+          .values({
+            departmentId: input.department.id,
+            employeeId: queryResult[0].insertId,
+          })
+          .execute();
+      }
+
+      return queryResult[0].insertId;
+    });
+
+    return this.getById(employeeCreatedId);
   }
 
   async delete(id: number): Promise<void> {
