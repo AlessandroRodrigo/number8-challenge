@@ -91,7 +91,7 @@ export function EmployeeDetailCard(employee: Props) {
             <Avatar
               size="xl"
               radius="sm"
-              src="https://via.placeholder.com/500"
+              src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
               alt="placeholder-image"
             />
           </Indicator>
