@@ -29,7 +29,7 @@ export default function EmployeeDetails() {
         <title>{employeeFullName} - Employee Details</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container component="main">
+      <Container component="main" pb="lg">
         <Flex align="baseline" gap="md">
           <Link href="/" passHref>
             <ActionIcon variant="transparent" color="dark">
