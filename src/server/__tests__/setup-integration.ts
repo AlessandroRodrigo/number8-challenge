@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { appRouter } from "~/server/api/root";
 import { createInnerTRPCContext } from "~/server/api/trpc";
+import { DepartmentFactory } from "~/server/entities/department/department.factory";
 import { EmployeeFactory } from "~/server/entities/employee/employee.factory";
 import { drizzleClient } from "~/server/repositories/drizzle/client";
 import { DepartmentRepository } from "~/server/repositories/drizzle/department.repository";
@@ -11,9 +12,11 @@ const departmentRepository = new DepartmentRepository();
 const employeeRepository = new EmployeeRepository();
 
 async function createDepartment() {
-  return await departmentRepository.create({
-    name: faker.commerce.department(),
-  });
+  return await departmentRepository.create(
+    DepartmentFactory.create({
+      name: faker.commerce.department(),
+    }),
+  );
 }
 
 async function createEmployeeWithDepartment() {
@@ -29,6 +32,7 @@ async function createEmployeeWithDepartment() {
       id: department.id,
       name: department.name,
     },
+    status: "active",
   });
 
   return employeeRepository.create(employee);
