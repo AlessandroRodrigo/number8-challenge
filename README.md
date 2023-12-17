@@ -21,7 +21,7 @@ This is challenge was made using the following technologies:
 
 ### Principles applied
 
-Given the nature of the challenge, I decided to apply great engineering principles to the project, but considering the time I had to deliver it, I decided to focus on the following:
+Given the nature of the challenge, I decided to apply great engineering principles to the project, but considering the time I had to deliver it, I decided to keep it simple and focus on the following:
 
 - **SOLID** and **DRY**
 - **Clean Architecture**: You will se some aspects of the Clean Architecture in the project, like the separation of the business logic from the framework, the use of the Dependency Inversion Principle, and the use of the Dependency Injection pattern. The services could be splited even more into use cases to follow the Clean Architecture, but I decided to keep it simple.
