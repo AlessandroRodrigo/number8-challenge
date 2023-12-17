@@ -6,8 +6,6 @@ import { Inter } from "next/font/google";
 
 import { api } from "~/utils/api";
 
-import "~/styles/globals.css";
-
 const inter = Inter({ subsets: ["latin"] });
 
 const theme = createTheme({});
