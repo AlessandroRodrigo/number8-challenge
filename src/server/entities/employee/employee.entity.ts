@@ -1,7 +1,7 @@
+import { Entity } from "~/server/entities/@shared/entity.abstract";
 import { type Department } from "~/server/entities/department/department.entity";
-import { type Entity } from "~/server/entities/entity.abstract";
 
-export class Employee implements Entity {
+export class Employee extends Entity {
   public department: Department | null = null;
 
   constructor(
@@ -12,6 +12,7 @@ export class Employee implements Entity {
     public phone: string,
     public address: string,
   ) {
+    super();
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -22,5 +23,9 @@ export class Employee implements Entity {
 
   public setDepartment(department: Department) {
     this.department = department;
+  }
+
+  validate(): void {
+    throw new Error("Method not implemented.");
   }
 }
