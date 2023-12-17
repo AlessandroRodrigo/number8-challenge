@@ -1,4 +1,4 @@
-import { type Department } from "~/server/entities/department/department.entity";
+import { DepartmentFactory } from "~/server/entities/department/department.factory";
 import {
   Employee,
   type EmployeeStatus,
@@ -12,7 +12,10 @@ export class EmployeeFactory {
     hireDate: Date;
     phone: string;
     address: string;
-    department: Department | null;
+    department: {
+      id: number;
+      name: string;
+    } | null;
     status: EmployeeStatus;
   }) {
     const employee = new Employee(
@@ -25,7 +28,8 @@ export class EmployeeFactory {
       input.status,
     );
 
-    if (input.department) employee.setDepartment(input.department ?? null);
+    if (input.department)
+      employee.setDepartment(DepartmentFactory.create(input.department));
 
     return employee;
   }

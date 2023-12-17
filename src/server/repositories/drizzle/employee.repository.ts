@@ -30,6 +30,7 @@ export class EmployeeRepository implements IEmployeeRepository {
           id: item.department.id,
           name: item.department.name,
         },
+        status: item.employee.status,
       }),
     );
   }
@@ -55,7 +56,8 @@ export class EmployeeRepository implements IEmployeeRepository {
       hireDate: result[0]?.employee.hireDate,
       phone: result[0]?.employee.phone,
       address: result[0]?.employee.address,
-      department: result[0]?.department,
+      department: result[0]?.department ?? null,
+      status: result[0]?.employee.status,
     });
   }
 
@@ -69,6 +71,7 @@ export class EmployeeRepository implements IEmployeeRepository {
           hireDate: input.hireDate,
           phone: input.phone,
           address: input.address,
+          status: input.status,
         })
         .execute();
 
