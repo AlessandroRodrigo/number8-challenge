@@ -1,3 +1,3 @@
-import { GetDepartmentRegistryOutputDto } from "~/server/services/dto/employee/get-department-registry.output-dto";
+import { GetDepartmentOutputDto } from "~/server/services/dto/employee/get-department.output-dto";
 
-export const GetAllDepartmentOutputDto = GetDepartmentRegistryOutputDto.array();
+export const GetAllDepartmentOutputDto = GetDepartmentOutputDto.array();
