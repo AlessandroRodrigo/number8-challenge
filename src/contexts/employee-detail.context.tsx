@@ -10,12 +10,14 @@ type EmployeeDetailContextProps = {
     fullName: string;
     data: inferProcedureOutput<AppRouter["employees"]["getById"]> | undefined;
     isLoading: boolean;
+    isError?: boolean;
   };
   departmentRegistry: {
     data:
       | inferProcedureOutput<AppRouter["employees"]["getDepartmentRegistry"]>
       | undefined;
     isLoading: boolean;
+    isError?: boolean;
   };
   departmentHasChanged: boolean;
   isUpdating: boolean;
@@ -116,8 +118,6 @@ export function EmployeeDetailProvider({
     });
   }
 
-  if (employeeQuery.isLoading) return <div>Loading...</div>;
-
   return (
     <EmployeeDetailContext.Provider
       value={{
@@ -126,10 +126,12 @@ export function EmployeeDetailProvider({
           fullName,
           data: employeeQuery.data,
           isLoading: employeeQuery.isLoading,
+          isError: employeeQuery.isError,
         },
         departmentRegistry: {
           data: departmentRegistryQuery.data,
           isLoading: departmentRegistryQuery.isLoading,
+          isError: departmentRegistryQuery.isError,
         },
         departmentHasChanged,
         isUpdating: updateEmployeeMutation.isLoading,
