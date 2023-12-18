@@ -1,8 +1,6 @@
-<!-- write a brief about the number8 challenge -->
-
 ## Number8 Challenge
 
-This is challenge was made using the following technologies:
+This challenge was made using the following technologies:
 
 - [React](https://reactjs.org/)
 - [Next.js](https://nextjs.org/)
@@ -26,7 +24,7 @@ Given the nature of the challenge, I decided to apply great engineering principl
 - **SOLID** and **DRY**
 - **Unit, Integration and E2E tests**
 - **React error handling**
-- **Clean Architecture**: You will se some aspects of the Clean Architecture in the project, like the separation of the business logic from the framework, the use of the Dependency Inversion Principle, and the use of the Dependency Injection pattern. The services could be splited even more into use cases to follow the Clean Architecture, but I decided to keep it simple.
+- **Clean Architecture**: You will see some aspects of the Clean Architecture in the project, like the separation of the business logic from the framework, the use of the Dependency Inversion Principle, and the use of the Dependency Injection pattern. The services could be splited even more into use cases to follow the Clean Architecture, but I decided to keep it simple.
 - **GoF Design Patterns**: I used the Factory Method pattern to create the entities, and the Adapter pattern to create basically everything on the server side.
 - **General Design Patterns**: I used the Dependency Injection pattern to handle with the dependencies of the application, and the Singleton pattern to handle with the database connection.
 - **DDD Patterns**: I used the Repository pattern to handle with the data persistence, and the Specification pattern to handle with the business rules.
@@ -40,7 +38,7 @@ Given the nature of the challenge, I decided to apply great engineering principl
 
 - **Disclaimer about tRPC**: I used tRPC just to create the rest layer of the application.
 - **Disclaimer about React Context API**: I used the React Context API, like the challenge description said, but I really didn't like the result. I would prefer to uso other approach, like the ReactQuery cache management or Zustand, for example. The application doesn't have a lot of states to explain the use of a state management like Context and it hurts the separation of concerns, everything could be handled with a little of dependency injection.
-- **Disclaimer about router tests**: All tests for routers is working, but it's using local mySQL instance, and when you run all togheter, it's not working. I don't know why, but I think it's something related to the connection pool. I tried to fix it, but I didn't have time to do that. If you run the tests individually, it will work.
+- **Disclaimer about router tests**: All tests for routers is working, but it's using local mySQL instance, and when you run all together, it's not working. I don't know why, but I think it's something related to the connection pool. I tried to fix it, but I didn't have time to do that. If you run the tests individually, it will work.
 - **Disclaimer about frontend unit tests**: I left some unit tests for the frontend just to show that I know how to do that, but there's a lot of ways to improve it. Isn't good, but shows knowledge.
 - **Disclaimer about E2E tests**: I implemented E2E tests with cypress, again, there's a lot of ways to improve it, but I didn't have time to do that. I just implemented to show that I know how to do that.
 - **Error handling on React**: I implemented a ErrorBoundary and encapsulate the employee details context just to show the functionality and I've tried improve error handling encapsulating components and controling based on validation and return. Based on this, the components should not affect each other or break the entire application, they will just handle with the errors and show the messages, breaking just the component that throwed the error.
@@ -60,7 +58,7 @@ To run the application with Docker you just need to run the following command:
 docker-compose up
 ```
 
-After the compose is up, you need to run db:push and db:seed script to migrate database schema and populate the database with fake data. To do that, you need to run the following command:
+After the compose is up, you need to run db:push and db:seed scripts to migrate database schema and populate the database with fake data. To do that, you need to run the following command:
 
 ```bash
 yarn db:push && yarn db:seed
