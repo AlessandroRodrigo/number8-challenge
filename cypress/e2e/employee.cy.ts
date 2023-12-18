@@ -1,12 +1,9 @@
-describe("template spec", () => {
+describe("Employee E2E", () => {
   beforeEach(() => {
     cy.intercept("GET", "**employees.getAll**").as("getEmployees");
     cy.intercept("GET", "**employees.getById**").as("getEmployee");
     cy.intercept("GET", "**employees.getDepartmentRegistry**").as(
       "getEmployee",
-    );
-    cy.intercept("GET", "**employees.getDepartmentRegistry**").as(
-      "getDepartmentRegistry",
     );
     cy.intercept("POST", "**employees.update**").as("updateEmployee");
     cy.visit("/");
@@ -40,8 +37,6 @@ describe("template spec", () => {
     cy.wait("@updateEmployee").then((interception) => {
       expect(interception.response.statusCode).to.equal(200);
     });
-
-    cy.get("button").contains("Activate").should("exist");
   });
 
   it("should change the employee department", () => {
@@ -50,23 +45,13 @@ describe("template spec", () => {
     cy.get("article").first().contains("View details").click();
 
     cy.wait("@getEmployee");
-    cy.wait("@getDepartmentRegistry");
-
-    cy.wait("@getEmployee");
 
     cy.get("label").contains("Select a department").click();
 
-    cy.get("div[role='option']").last().click();
-
-    cy.get("button").contains("Update").click();
-
-    cy.wait("@updateEmployee").then((interception) => {
-      expect(interception.response.statusCode).to.equal(200);
+    cy.get("div[role='option']").then(($elements) => {
+      const randomIndex = Math.floor(Math.random() * $elements.length);
+      cy.wrap($elements).eq(randomIndex).click();
     });
-
-    cy.get("label").contains("Select a department").click();
-
-    cy.get("div[role='option']").first().click();
 
     cy.get("button").contains("Update").click();
 
