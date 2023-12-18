@@ -13,19 +13,17 @@ export function EmployeeCard({ employee }: Props) {
   return (
     <Card withBorder component="article">
       <Flex gap="lg">
-        <figure>
-          <Image
-            data-testid="employee-image"
-            width={150}
-            height={150}
-            src="https://via.placeholder.com/150"
-            alt={employee.firstName}
-            style={{
-              borderRadius: 4,
-              objectFit: "cover",
-            }}
-          />
-        </figure>
+        <Image
+          data-testid="employee-image"
+          width={150}
+          height={150}
+          src="https://via.placeholder.com/150"
+          alt={employee.firstName}
+          style={{
+            borderRadius: 4,
+            objectFit: "cover",
+          }}
+        />
 
         <Box
           style={{
