@@ -17,6 +17,7 @@ RUN \
 ##### BUILDER
 
 FROM --platform=linux/amd64 node:20 AS builder
+ARG DATABASE_URL
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
