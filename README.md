@@ -37,7 +37,7 @@ Given the nature of the challenge, I decided to apply great engineering principl
 ### Disclaimers
 
 - **Disclaimer about tRPC**: I used tRPC just to create the rest layer of the application.
-- **Disclaimer about React Context API**: I used the React Context API, like the challenge description said, but I really didn't like the result. I would prefer to uso other approach, like the ReactQuery cache management, for example. The application doesn't have a lot of states to explain the use of a state management like Context and it hurts the separation of concerns, everything could be handled with a little of dependency injection.
+- **Disclaimer about React Context API**: I used the React Context API, like the challenge description said, but I really didn't like the result. I would prefer to uso other approach, like the ReactQuery cache management or Zustand, for example. The application doesn't have a lot of states to explain the use of a state management like Context and it hurts the separation of concerns, everything could be handled with a little of dependency injection.
 
 ### How to run
 
