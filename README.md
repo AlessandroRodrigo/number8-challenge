@@ -24,6 +24,8 @@ This is challenge was made using the following technologies:
 Given the nature of the challenge, I decided to apply great engineering principles to the project, but considering the time I had to deliver it, I decided to keep it simple and focus on the following:
 
 - **SOLID** and **DRY**
+- **Unit, Integration and E2E tests**
+- **React error handling**
 - **Clean Architecture**: You will se some aspects of the Clean Architecture in the project, like the separation of the business logic from the framework, the use of the Dependency Inversion Principle, and the use of the Dependency Injection pattern. The services could be splited even more into use cases to follow the Clean Architecture, but I decided to keep it simple.
 - **GoF Design Patterns**: I used the Factory Method pattern to create the entities, and the Adapter pattern to create basically everything on the server side.
 - **General Design Patterns**: I used the Dependency Injection pattern to handle with the dependencies of the application, and the Singleton pattern to handle with the database connection.
@@ -42,6 +44,7 @@ Given the nature of the challenge, I decided to apply great engineering principl
 - **Disclaimer about frontend unit tests**: I left some unit tests for the frontend just to show that I know how to do that, but there's a lot of ways to improve it. Isn't good, but shows knowledge.
 - **Disclaimer about E2E tests**: I implemented E2E tests with cypress, again, there's a lot of ways to improve it, but I didn't have time to do that. I just implemented to show that I know how to do that.
 - **Error handling on React**: I implemented a ErrorBoundary and encapsulate the employee details context just to show the functionality and I've tried improve error handling encapsulating components and controling based on validation and return. Based on this, the components should not affect each other or break the entire application, they will just handle with the errors and show the messages, breaking just the component that throwed the error.
+- **Error handling on server**: Due the time, I focused on the main concepts, but would be nice improve the error handling on the server side, encapsulating the errors and returning to the client side.
 
 ### How to run
 
