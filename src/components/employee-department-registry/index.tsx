@@ -18,16 +18,16 @@ export function EmployeeDepartmentRegistry() {
         <Table.Tbody>
           {departmentRegistry.data?.map((registry, index) => (
             <Table.Tr key={index}>
-              <Table.Th p="md" fw="normal">
+              <Table.Td p="md" fw="normal">
                 {registry.department.name}
-              </Table.Th>
-              <Table.Th p="md" fw="normal">
+              </Table.Td>
+              <Table.Td p="md" fw="normal">
                 {DateUtils.formatDate(registry.startDate)}
-              </Table.Th>
-              <Table.Th p="md" fw="normal">
+              </Table.Td>
+              <Table.Td p="md" fw="normal">
                 {(registry.endDate && DateUtils.formatDate(registry.endDate)) ??
                   "Present"}
-              </Table.Th>
+              </Table.Td>
             </Table.Tr>
           ))}
         </Table.Tbody>
