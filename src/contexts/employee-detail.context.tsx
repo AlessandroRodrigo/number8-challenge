@@ -116,6 +116,8 @@ export function EmployeeDetailProvider({
     });
   }
 
+  if (employeeQuery.isLoading) return <div>Loading...</div>;
+
   return (
     <EmployeeDetailContext.Provider
       value={{
