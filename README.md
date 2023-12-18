@@ -50,3 +50,13 @@ To run the application with Docker, you just need to run the following command:
 ```bash
 docker-compose up
 ```
+
+After that, you need to run the migrations and seed the database. To do that, you need to run the following commands:
+
+```bash
+yarn db:push && yarn db:seed
+```
+
+Make it out of docker compose, for it, pick the DATABASE_URL from the docker-compose.yml and put it on a local .env file.
+
+Now you can access the application at [http://localhost:3000](http://localhost:3000).
