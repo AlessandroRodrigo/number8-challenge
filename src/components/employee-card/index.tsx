@@ -11,45 +11,50 @@ type Props = {
 
 export function EmployeeCard({ employee }: Props) {
   return (
-    <Card withBorder>
+    <Card withBorder component="article">
       <Flex gap="lg">
-        <Image
-          width={150}
-          height={150}
-          src="https://via.placeholder.com/150"
-          alt="test"
-          style={{
-            borderRadius: 4,
-            objectFit: "cover",
-          }}
-        />
+        <figure>
+          <Image
+            width={150}
+            height={150}
+            src="https://via.placeholder.com/150"
+            alt="test"
+            style={{
+              borderRadius: 4,
+              objectFit: "cover",
+            }}
+          />
+        </figure>
 
         <Box
           style={{
             flex: 1,
           }}
+          component="section"
         >
           <Flex align="baseline" gap="sm">
-            <Text size="lg" fw="bold">
+            <Text size="lg" fw="bold" component="h2">
               {employee.firstName}
             </Text>
-            <Text opacity={0.75}>({employee.department.name})</Text>
+            <Text opacity={0.75} component="p">
+              ({employee.department.name})
+            </Text>
           </Flex>
 
           <Flex direction="column">
-            <Text>Hire Date</Text>
-            <Text>
+            <Text component="p">Hire Date</Text>
+            <Text component="p">
               {DateUtils.formatDate(employee.hireDate)} (
               {DateUtils.timeOfService(employee.hireDate)})
             </Text>
           </Flex>
         </Box>
 
-        <Box>
+        <nav>
           <Link href={`/employees/${employee.id}`} passHref>
             <Button>View details</Button>
           </Link>
-        </Box>
+        </nav>
       </Flex>
     </Card>
   );
