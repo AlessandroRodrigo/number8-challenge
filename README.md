@@ -57,6 +57,6 @@ After the compose is up, you need to run db:push and db:seed script to migrate d
 yarn db:push && yarn db:seed
 ```
 
-You will need to run out of the compose, because it doesn't work well togheter.
+You will need to run push and seed out of the compose, because it doesn't work well togheter.
 
 If everything was ok, you will be able to access the application on the following URL: http://localhost:3000
