@@ -8,17 +8,22 @@ type Props = {
 };
 
 export function DepartmentSelect({ value, onChange }: Props) {
-  const { isLoading, data } = api.departments.getAll.useQuery(undefined, {
-    onError() {
-      notifications.show({
-        title: "Error",
-        message: "Failed to load departments",
-        color: "red",
-      });
+  const { isLoading, data, isError } = api.departments.getAll.useQuery(
+    undefined,
+    {
+      onError() {
+        notifications.show({
+          title: "Error",
+          message: "Failed to load departments",
+          color: "red",
+        });
+      },
     },
-  });
+  );
 
   if (isLoading) return <Loader />;
+
+  if (isError) return <div>Something went wrong</div>;
 
   return (
     <Select
