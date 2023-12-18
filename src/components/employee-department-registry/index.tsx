@@ -1,9 +1,13 @@
-import { Card, Table } from "@mantine/core";
+import { Card, Loader, Table } from "@mantine/core";
 import { useEmployeeDetailContext } from "~/hooks/use-employee-detail-context";
 import { DateUtils } from "~/utils/date";
 
 export function EmployeeDepartmentRegistry() {
   const { departmentRegistry } = useEmployeeDetailContext();
+
+  if (departmentRegistry.isLoading) return <Loader />;
+
+  if (departmentRegistry.isError) return <div>Something went wrong</div>;
 
   return (
     <Card withBorder p={0}>
