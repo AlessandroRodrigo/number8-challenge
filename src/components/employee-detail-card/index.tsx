@@ -42,7 +42,6 @@ export function EmployeeDetailCard() {
                 alt={employee.fullName}
               />
             </Indicator>
-            <figcaption>{employee.fullName}</figcaption>
           </figure>
         </section>
 
