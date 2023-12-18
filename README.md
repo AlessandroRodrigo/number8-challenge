@@ -49,7 +49,9 @@ To run the application, you will need to have the following tools installed on y
 
 - [Node.js](https://nodejs.org/) (v20.6.0 or higher)
 
-I left a `docker-compose.yml` file in the root of the project to help you to run, but you can also run the application without Docker. To run the application with Docker you just need to run the following command:
+I left a `docker-compose.yml` file in the root of the project to help you to run, but you can also run the application without Docker. You can even run on development mode with docker compose watch feature, I left the code commented on the compose file.
+
+To run the application with Docker you just need to run the following command:
 
 ```bash
 docker-compose up
