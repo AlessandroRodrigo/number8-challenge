@@ -80,6 +80,7 @@ export function EmployeeDetailCard() {
             </Flex>
 
             <Button
+              role="toggle-status"
               onClick={handleToggleStatus}
               color={employee.data?.status === "active" ? "red" : "teal"}
               aria-label={
