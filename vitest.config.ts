@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     env: {
-      DATABASE_URL: "mysql://user:1234@localhost:3306/mydatabase",
+      DATABASE_URL: "mysql://user:password@localhost:3306/dbname",
     },
     alias: {
       "~": "src",
