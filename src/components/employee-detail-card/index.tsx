@@ -26,24 +26,27 @@ export function EmployeeDetailCard() {
   return (
     <Card padding="lg" radius="md" withBorder>
       <Flex gap="md">
-        <div>
-          <Indicator
-            inline
-            label={employee.data?.status === "active" ? "Active" : "Inactive"}
-            color={employee.data?.status === "active" ? "teal" : "red"}
-            size="24"
-            position="bottom-center"
-          >
-            <Avatar
-              size="xl"
-              radius="sm"
-              src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
-              alt="placeholder-image"
-            />
-          </Indicator>
-        </div>
+        <section>
+          <figure>
+            <Indicator
+              inline
+              label={employee.data?.status === "active" ? "Active" : "Inactive"}
+              color={employee.data?.status === "active" ? "teal" : "red"}
+              size="24"
+              position="bottom-center"
+            >
+              <Avatar
+                size="xl"
+                radius="sm"
+                src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
+                alt={employee.fullName}
+              />
+            </Indicator>
+            <figcaption>{employee.fullName}</figcaption>
+          </figure>
+        </section>
 
-        <Flex direction="column" gap="md">
+        <Flex direction="column" gap="md" component="article">
           <Text size="lg" fw="bold">
             {employee.fullName}
           </Text>
@@ -66,10 +69,13 @@ export function EmployeeDetailCard() {
         </Flex>
 
         <Stack ml="auto" gap={0}>
-          <Title order={5}>Hire Date</Title>
+          <header>
+            <Title order={5}>Hire Date</Title>
+          </header>
+
           <Stack>
             <Flex gap="sm">
-              <span>{DateUtils.formatDate(employee.data?.hireDate)}</span>
+              <time>{DateUtils.formatDate(employee.data?.hireDate)}</time>
               <span>({DateUtils.timeOfService(employee.data?.hireDate)})</span>
             </Flex>
 
