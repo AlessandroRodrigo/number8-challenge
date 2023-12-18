@@ -1,6 +1,6 @@
 function waitForResponse(alias: string, statusCode: number) {
   cy.wait(alias).then((interception) => {
-    expect(interception.response.statusCode).to.equal(statusCode);
+    expect(interception.response?.statusCode).to.equal(statusCode);
   });
 }
 
