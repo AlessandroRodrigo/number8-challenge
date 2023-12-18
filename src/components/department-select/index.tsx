@@ -22,6 +22,7 @@ export function DepartmentSelect({ value, onChange }: Props) {
 
   return (
     <Select
+      data-testid="department-select"
       label="Select a department"
       value={value}
       onChange={(value) => {
