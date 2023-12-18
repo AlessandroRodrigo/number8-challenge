@@ -3,20 +3,21 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      # dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     environment:
       DATABASE_URL: mysql://user:password@db:3306/dbname
     ports:
       - 3000:3000
-    develop:
-      watch:
-        - action: sync
-          path: .
-          target: app
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: package.json
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: .
+    #       target: app
+    #       ignore:
+    #         - node_modules/
+    #     - action: rebuild
+    #       path: package.json
   db:
     image: mysql:8.0.35
     volumes:
