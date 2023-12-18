@@ -4,6 +4,7 @@ import {
   Card,
   Flex,
   Indicator,
+  Loader,
   Stack,
   Text,
   Title,
@@ -22,6 +23,10 @@ export function EmployeeDetailCard() {
     isUpdating,
     departmentHasChanged,
   } = useEmployeeDetailContext();
+
+  if (employee.isLoading) return <Loader />;
+
+  if (employee.isError) return <div>Something went wrong</div>;
 
   return (
     <Card padding="lg" radius="md" withBorder>
