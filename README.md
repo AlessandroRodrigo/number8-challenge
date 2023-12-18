@@ -38,3 +38,25 @@ Given the nature of the challenge, I decided to apply great engineering principl
 
 - **Disclaimer about tRPC**: I used tRPC just to create the rest layer of the application.
 - **Disclaimer about React Context API**: I used the React Context API, like the challenge description said, but I really didn't like the result. I would prefer to uso other approach, like the ReactQuery cache management, for example. The application doesn't have a lot of states to explain the use of a state management like Context and it hurts the separation of concerns, everything could be handled with a little of dependency injection.
+
+### How to run
+
+To run the application, you will need to have the following tools installed on your machine:
+
+- [Node.js](https://nodejs.org/) (v20.6.0 or higher)
+
+I left a `docker-compose.yml` file in the root of the project to help you to run, but you can also run the application without Docker. To run the application with Docker you just need to run the following command:
+
+```bash
+docker-compose up
+```
+
+After the compose is up, you need to run db:push and db:seed script to migrate database schema and populate the database with fake data. To do that, you need to run the following command:
+
+```bash
+yarn db:push && yarn db:seed
+```
+
+You will need to run out of the compose, because it doesn't work well togheter.
+
+If everything was ok, you will be able to access the application on the following URL: http://localhost:3000
