@@ -62,6 +62,7 @@ export function EmployeeDetailCard() {
               onClick={handleDepartmentChange}
               loading={isUpdating}
               disabled={departmentHasChanged}
+              aria-disabled={departmentHasChanged}
             >
               Update
             </Button>
@@ -82,6 +83,11 @@ export function EmployeeDetailCard() {
             <Button
               onClick={handleToggleStatus}
               color={employee.data?.status === "active" ? "red" : "teal"}
+              aria-label={
+                employee.data?.status === "active"
+                  ? "Deactivate Employee"
+                  : "Activate Employee"
+              }
             >
               {employee.data?.status === "active" ? "Deactivate" : "Activate"}
             </Button>
