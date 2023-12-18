@@ -15,10 +15,11 @@ export function EmployeeCard({ employee }: Props) {
       <Flex gap="lg">
         <figure>
           <Image
+            data-testid="employee-image"
             width={150}
             height={150}
             src="https://via.placeholder.com/150"
-            alt="test"
+            alt={employee.firstName}
             style={{
               borderRadius: 4,
               objectFit: "cover",
@@ -33,10 +34,19 @@ export function EmployeeCard({ employee }: Props) {
           component="section"
         >
           <Flex align="baseline" gap="sm">
-            <Text size="lg" fw="bold" component="h2">
+            <Text
+              size="lg"
+              fw="bold"
+              component="h2"
+              data-testid="employee-name"
+            >
               {employee.firstName}
             </Text>
-            <Text opacity={0.75} component="p">
+            <Text
+              opacity={0.75}
+              component="p"
+              data-testid="employee-department"
+            >
               ({employee.department.name})
             </Text>
           </Flex>
@@ -51,7 +61,11 @@ export function EmployeeCard({ employee }: Props) {
         </Box>
 
         <nav>
-          <Link href={`/employees/${employee.id}`} passHref>
+          <Link
+            data-testid="employee-details-button"
+            href={`/employees/${employee.id}`}
+            passHref
+          >
             <Button>View details</Button>
           </Link>
         </nav>
