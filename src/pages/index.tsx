@@ -25,9 +25,13 @@ export default function Home() {
 }
 
 function EmployeeList() {
-  const { isLoading, data } = api.employees.getAll.useQuery();
+  const { isLoading, data, isError } = api.employees.getAll.useQuery();
 
   if (isLoading) return <div>Loading...</div>;
+
+  if (!isLoading && isError) return <div>Something went wrong</div>;
+
+  if (!isLoading && !data && !isError) return <div>No data</div>;
 
   return (
     <Flex direction="column" gap="md">
