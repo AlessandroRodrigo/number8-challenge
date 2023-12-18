@@ -27,22 +27,20 @@ export function EmployeeDetailCard() {
     <Card padding="lg" radius="md" withBorder>
       <Flex gap="md">
         <section>
-          <figure>
-            <Indicator
-              inline
-              label={employee.data?.status === "active" ? "Active" : "Inactive"}
-              color={employee.data?.status === "active" ? "teal" : "red"}
-              size="24"
-              position="bottom-center"
-            >
-              <Avatar
-                size="xl"
-                radius="sm"
-                src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
-                alt={employee.fullName}
-              />
-            </Indicator>
-          </figure>
+          <Indicator
+            inline
+            label={employee.data?.status === "active" ? "Active" : "Inactive"}
+            color={employee.data?.status === "active" ? "teal" : "red"}
+            size="24"
+            position="bottom-center"
+          >
+            <Avatar
+              size="xl"
+              radius="sm"
+              src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
+              alt={employee.fullName}
+            />
+          </Indicator>
         </section>
 
         <Flex direction="column" gap="md" component="article">
