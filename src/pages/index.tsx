@@ -29,7 +29,7 @@ function EmployeeList() {
 
   if (isLoading) return <div>Loading...</div>;
 
-  if (!isLoading && isError) return <div>Something went wrong</div>;
+  if (isError) return <div>Something went wrong</div>;
 
   if (!isLoading && !data && !isError) return <div>No data</div>;
 
