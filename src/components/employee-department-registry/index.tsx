@@ -3,11 +3,13 @@ import { useEmployeeDetailContext } from "~/hooks/use-employee-detail-context";
 import { DateUtils } from "~/utils/date";
 
 export function EmployeeDepartmentRegistry() {
-  const { departmentRegistry } = useEmployeeDetailContext();
+  const {
+    departmentRegistryQuery: { isLoading, isError, data },
+  } = useEmployeeDetailContext();
 
-  if (departmentRegistry.isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
 
-  if (departmentRegistry.isError) return <div>Something went wrong</div>;
+  if (isError) return <div>Something went wrong</div>;
 
   return (
     <Card withBorder p={0}>
@@ -20,7 +22,7 @@ export function EmployeeDepartmentRegistry() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {departmentRegistry.data?.map((registry, index) => (
+          {data?.map((registry, index) => (
             <Table.Tr key={index}>
               <Table.Td p="md" fw="normal">
                 {registry.department.name}

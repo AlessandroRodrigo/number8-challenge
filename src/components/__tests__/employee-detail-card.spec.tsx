@@ -37,14 +37,7 @@ describe("EmployeeDetailCard", () => {
       <MantineProvider>
         <EmployeeDetailContext.Provider
           value={{
-            department: "1",
-            departmentHasChanged: false,
-            departmentRegistry: {
-              isLoading: false,
-              data: [],
-            },
-            employee: {
-              fullName: "John Doe",
+            employeeQuery: {
               data: {
                 id: 1,
                 address: "123 Main St",
@@ -53,17 +46,42 @@ describe("EmployeeDetailCard", () => {
                   name: "Engineering",
                 },
                 firstName: "John",
-                lastName: "Doe",
+                fullName: "John Doe",
                 hireDate: new Date(),
+                lastName: "Doe",
                 phone: "1234567890",
                 status: "active",
               },
+              isError: false,
               isLoading: false,
+              refetch: vi.fn(),
             },
-            handleDepartmentChange: mockHandleDepartmentChange,
-            handleToggleStatus: mockHandleToggleStatus,
-            isUpdating: false,
-            setDepartment: vi.fn(),
+            departmentRegistryQuery: {
+              data: [
+                {
+                  department: {
+                    id: 1,
+                    name: "Engineering",
+                  },
+                  endDate: null,
+                  startDate: new Date(),
+                },
+              ],
+              isError: false,
+              isLoading: false,
+              refetch: vi.fn(),
+            },
+            updateEmployeeDepartment: {
+              department: "1",
+              departmentHasChanged: false,
+              isUpdating: false,
+              setDepartment: vi.fn(),
+              updateEmployeeDepartment: mockHandleDepartmentChange,
+            },
+            updateEmployeeStatus: {
+              isUpdating: false,
+              toggleStatus: mockHandleToggleStatus,
+            },
           }}
         >
           <EmployeeDetailCard />

@@ -15,18 +15,20 @@ import { DateUtils } from "~/utils/date";
 
 export function EmployeeDetailCard() {
   const {
-    employee,
-    department,
-    setDepartment,
-    handleDepartmentChange,
-    handleToggleStatus,
-    isUpdating,
-    departmentHasChanged,
+    employeeQuery: { data, isLoading, isError },
+    updateEmployeeDepartment: {
+      department,
+      departmentHasChanged,
+      setDepartment,
+      updateEmployeeDepartment,
+      isUpdating: isUpdatingDepartment,
+    },
+    updateEmployeeStatus: { toggleStatus, isUpdating: isUpdatingStatus },
   } = useEmployeeDetailContext();
 
-  if (employee.isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
 
-  if (employee.isError) return <div>Something went wrong</div>;
+  if (isError) return <div>Something went wrong</div>;
 
   return (
     <Card padding="lg" radius="md" withBorder>
@@ -34,8 +36,8 @@ export function EmployeeDetailCard() {
         <section>
           <Indicator
             inline
-            label={employee.data?.status === "active" ? "Active" : "Inactive"}
-            color={employee.data?.status === "active" ? "teal" : "red"}
+            label={data?.status === "active" ? "Active" : "Inactive"}
+            color={data?.status === "active" ? "teal" : "red"}
             size="24"
             position="bottom-center"
           >
@@ -43,26 +45,26 @@ export function EmployeeDetailCard() {
               size="xl"
               radius="sm"
               src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png"
-              alt={employee.fullName}
+              alt={data?.fullName}
             />
           </Indicator>
         </section>
 
         <Flex direction="column" gap="md" component="article">
           <Text size="lg" fw="bold">
-            {employee.fullName}
+            {data?.fullName}
           </Text>
           <Flex direction="column">
-            <span>Employee ID: {employee.data?.id}</span>
-            <span>Department: {employee.data?.department?.name}</span>
-            <span>Telephone: {employee.data?.phone}</span>
-            <span>Address: {employee.data?.address}</span>
+            <span>Employee ID: {data?.id}</span>
+            <span>Department: {data?.department?.name}</span>
+            <span>Telephone: {data?.phone}</span>
+            <span>Address: {data?.address}</span>
           </Flex>
           <Stack gap="sm">
             <DepartmentSelect value={department} onChange={setDepartment} />
             <Button
-              onClick={handleDepartmentChange}
-              loading={isUpdating}
+              onClick={updateEmployeeDepartment}
+              loading={isUpdatingDepartment}
               disabled={departmentHasChanged}
               aria-disabled={departmentHasChanged}
             >
@@ -78,21 +80,22 @@ export function EmployeeDetailCard() {
 
           <Stack>
             <Flex gap="sm">
-              <time>{DateUtils.formatDate(employee.data?.hireDate)}</time>
-              <span>({DateUtils.timeOfService(employee.data?.hireDate)})</span>
+              <time>{DateUtils.formatDate(data?.hireDate)}</time>
+              <span>({DateUtils.timeOfService(data?.hireDate)})</span>
             </Flex>
 
             <Button
               role="toggle-status"
-              onClick={handleToggleStatus}
-              color={employee.data?.status === "active" ? "red" : "teal"}
+              onClick={toggleStatus}
+              loading={isUpdatingStatus}
+              color={data?.status === "active" ? "red" : "teal"}
               aria-label={
-                employee.data?.status === "active"
+                data?.status === "active"
                   ? "Deactivate Employee"
                   : "Activate Employee"
               }
             >
-              {employee.data?.status === "active" ? "Deactivate" : "Activate"}
+              {data?.status === "active" ? "Deactivate" : "Activate"}
             </Button>
           </Stack>
         </Stack>
