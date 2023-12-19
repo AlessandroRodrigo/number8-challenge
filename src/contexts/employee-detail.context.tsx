@@ -1,56 +1,20 @@
-import { notifications } from "@mantine/notifications";
-import { type inferProcedureOutput } from "@trpc/server";
-import { createContext, useState, type PropsWithChildren } from "react";
-import { type AppRouter } from "~/server/api/root";
-import { api } from "~/utils/api";
+import { createContext, useEffect, type PropsWithChildren } from "react";
+import { useEmployeeDepartmentRegistryQuery } from "~/hooks/use-employee-department-registry-query";
+import { useEmployeeQuery } from "~/hooks/use-employee-query";
+import { useUpdateEmployeeDepartment } from "~/hooks/use-update-employee-department";
+import { useUpdateEmployeeStatus } from "~/hooks/use-update-employee-status";
 
 type EmployeeDetailContextProps = {
-  department: string;
-  employee: {
-    fullName: string;
-    data: inferProcedureOutput<AppRouter["employees"]["getById"]> | undefined;
-    isLoading: boolean;
-    isError?: boolean;
-  };
-  departmentRegistry: {
-    data:
-      | inferProcedureOutput<AppRouter["employees"]["getDepartmentRegistry"]>
-      | undefined;
-    isLoading: boolean;
-    isError?: boolean;
-  };
-  departmentHasChanged: boolean;
-  isUpdating: boolean;
+  employeeQuery: ReturnType<typeof useEmployeeQuery>;
+  departmentRegistryQuery: ReturnType<
+    typeof useEmployeeDepartmentRegistryQuery
+  >;
+  updateEmployeeDepartment: ReturnType<typeof useUpdateEmployeeDepartment>;
+  updateEmployeeStatus: ReturnType<typeof useUpdateEmployeeStatus>;
+} | null;
 
-  setDepartment: (value: string) => void;
-  handleDepartmentChange: () => Promise<void>;
-  handleToggleStatus: () => Promise<void>;
-};
-
-export const EmployeeDetailContext = createContext<EmployeeDetailContextProps>({
-  department: "",
-  employee: {
-    fullName: "",
-    data: undefined,
-    isLoading: false,
-  },
-  departmentRegistry: {
-    data: undefined,
-    isLoading: false,
-  },
-  departmentHasChanged: false,
-  isUpdating: false,
-
-  setDepartment: () => {
-    return;
-  },
-  handleDepartmentChange: async () => {
-    return;
-  },
-  handleToggleStatus: async () => {
-    return;
-  },
-});
+export const EmployeeDetailContext =
+  createContext<EmployeeDetailContextProps>(null);
 
 type ProviderProps = {
   id: number;
@@ -60,84 +24,30 @@ export function EmployeeDetailProvider({
   children,
   id,
 }: PropsWithChildren<ProviderProps>) {
-  const [department, setDepartment] = useState("");
-
-  const employeeQuery = api.employees.getById.useQuery(
-    {
-      id,
-    },
-    {
-      enabled: !!id,
-      onSuccess(data) {
-        setDepartment(data.department.id.toString());
-      },
-    },
-  );
-  const departmentRegistryQuery = api.employees.getDepartmentRegistry.useQuery({
+  const employeeQuery = useEmployeeQuery({
+    employeeId: id,
+  });
+  const updateEmployeeDepartment = useUpdateEmployeeDepartment({
+    employeeId: id,
+  });
+  const departmentRegistryQuery = useEmployeeDepartmentRegistryQuery({
+    employeeId: id,
+  });
+  const updateEmployeeStatus = useUpdateEmployeeStatus({
     employeeId: id,
   });
 
-  const departmentHasChanged =
-    department === employeeQuery.data?.department.id.toString();
-  const fullName = `${employeeQuery.data?.firstName} ${employeeQuery.data?.lastName}`;
-
-  const updateEmployeeMutation = api.employees.update.useMutation({
-    onSuccess() {
-      if (!employeeQuery.data?.id) return;
-
-      void employeeQuery.refetch();
-      void departmentRegistryQuery.refetch();
-    },
-  });
-
-  async function handleDepartmentChange() {
-    if (!employeeQuery.data) return;
-
-    await updateEmployeeMutation.mutateAsync({
-      id: employeeQuery.data.id,
-      departmentId: Number(department),
-    });
-
-    notifications.show({
-      title: "Department updated",
-      message: `${fullName}'s department has been updated`,
-    });
-  }
-
-  async function handleToggleStatus() {
-    if (!employeeQuery.data) return;
-
-    await updateEmployeeMutation.mutateAsync({
-      id: employeeQuery.data.id,
-      status: employeeQuery.data.status === "active" ? "inactive" : "active",
-    });
-
-    notifications.show({
-      title: "Employee status updated",
-      message: `${fullName}'s status has been updated`,
-    });
-  }
+  useEffect(() => {
+    void departmentRegistryQuery.refetch();
+  }, [employeeQuery.data]);
 
   return (
     <EmployeeDetailContext.Provider
       value={{
-        department,
-        employee: {
-          fullName,
-          data: employeeQuery.data,
-          isLoading: employeeQuery.isLoading,
-          isError: employeeQuery.isError,
-        },
-        departmentRegistry: {
-          data: departmentRegistryQuery.data,
-          isLoading: departmentRegistryQuery.isLoading,
-          isError: departmentRegistryQuery.isError,
-        },
-        departmentHasChanged,
-        isUpdating: updateEmployeeMutation.isLoading,
-        setDepartment,
-        handleDepartmentChange,
-        handleToggleStatus,
+        employeeQuery,
+        updateEmployeeDepartment,
+        departmentRegistryQuery,
+        updateEmployeeStatus,
       }}
     >
       {children}
