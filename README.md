@@ -32,10 +32,10 @@ Given the nature of the challenge, I decided to apply sound engineering principl
 
 - **Disclaimer about tRPC**: I used tRPC solely to create the REST layer of the application.
 - **Disclaimer about React Context API**: I used the React Context API, as the challenge description stated, but I believe that other approaches would also be suitable, such as ReactQuery cache management or Zustand.
-- **Disclaimer about router tests**: All tests for routers are working, but they use a local MySQL instance. When you run them all together, they will not work due to a problem with the connection pool that throws a deadlock and the test lifecycle can't clean the database, causing side effects. If you run the tests individually, they will work.
-- **Disclaimer about frontend unit tests**: I included some unit tests for the frontend to demonstrate my knowledge in this area, but there are many ways to improve it. It's not perfect, but it shows my understanding.
-- **Disclaimer about E2E tests**: I implemented E2E tests with Cypress. Again, there are many ways to improve it. I just implemented it to show that I know how to do it.
-- **Error handling on the server**: I focused on the main concepts, but it would be beneficial to improve the error handling on the server side by encapsulating the errors and returning them to the client side.
+- **Disclaimer about router tests**: All tests for routers are working, but they use a local MySQL instance. There’s an important follow up work for it, which I believe would be out of scope for this challenge: when you run them all together, they will not work due to a problem with the connection pool that throws a deadlock and the test lifecycle can't clean the database, causing side effects. Nonetheless, if you run the tests individually, they will work.
+- **Disclaimer about frontend unit tests**: I included some frontend unit tests for demonstrating my test-oriented approach when it comes to development and designing an application. Unit tests follow up work: handling the connection pool deadlock fix for the test suite.
+- **Disclaimer about E2E tests**: I implemented E2E tests with Cypress. The implementation is intended to show that I am experienced in that domain. E2E tests follow up work: implement coverage for other situations, such as error handling.
+- **Error handling on the server**: main concepts were addressed on the current state of the app. Error handling follow up work: improving the error handling on the server side by encapsulating the errors and returning them to the client side.
 
 ### How to Run
 
